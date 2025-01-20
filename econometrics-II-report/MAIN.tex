@@ -1,0 +1,66 @@
+\documentclass[a4paper,10pt,twocolumn,twoside]{article} %Pour une colonne il vous suffit de retirer "twocolumn,"
+\usepackage{tpl3}
+\usepackage{lipsum}
+\usepackage{amsmath}
+\usepackage{hyperref}
+
+%Pour mettre les vecteurs en gras, il faut dé commenter la ligne suivante 
+%\renewcommand{\vec}[1]{\boldsymbol{\mathbf{#1}}} 
+
+%-----------------------------Début du document---------------------------------
+\begin{document}
+
+\twocolumn[{%
+\begin{@twocolumnfalse}
+\logo
+\marginmark
+\header{Économétrie II}{Master 2 EEET}\\     % Matière et n° du TP
+
+\begin{flushright}
+\titre{{\strut \huge \bfseries \sffamily  \hspace*{7 cm}Évolution de la demande en électricité à l'horizon 2030}}\\ [0.15cm]                              % Titre du TP
+\end{flushright}
+% \vspace{-0.3cm}
+\auteur{{\strut\hfill\Large \sffamily {Thomas Da Costa$^{1, 3}$, Léa Guillaut$^{2, 3}$}}}\\[0.1cm]                                      %Auteur du TP
+\vspace*{-0.01cm}
+\formation{{\strut\hfill  \sffamily $^1$École Normale Supérieure -- Université Paris Sciences et Lettres (ENS - PSL)}  }  \\[0.cm]     
+\formation{{\strut\hfill  \sffamily $^2$Institut d'Études Politiques de Paris (SciencePo Paris)}}  \\[0cm]
+\formation{{\strut\hfill  \sffamily $^3$AgroParisTech -- Université Paris-Saclay}  }  \\[0.cm]   %Formation/Option
+\vspace*{-0.45cm}
+
+{\color{color2}\rule{\textwidth}{.8pt}}\vspace{0.1cm}
+\resume{\input{./resume.tex}}\vspace{0.1cm}            % Voir le fichier "resume.tex"
+\keywords{\rm Économétrie, Régression Linéaire, Prédiction.}\vspace{0.15cm} \\           % Mots clefs
+\end{@twocolumnfalse}}]
+
+%----------------------------Headers et Footers---------------------------------
+
+\pagestyle{fancy}
+\fancyhf{}
+
+\newcommand{\headere}{Master 2 EEET}            % Header externe
+\newcommand{\headeri}{Econométrie II}              % Header interne
+\newcommand{\footeri}{AgroParisTech}   % Footer interne
+
+\thispagestyle{plain}
+\headers
+
+%----------------------------------Contenu--------------------------------------
+
+\input{./0introduction.tex} %écrire de dans le fichier "introduction.tex"
+\input{./1theorie.tex}
+\input{./2Methodes.tex}
+\input{./3Resultats.tex}
+\input{./3zprototype.tex}%etc...
+\input{./4conclusion.tex}
+% pour créer un nouveau document en "XXX.tex" dans le fichier "sections" et ajouter dans le "main.tex" un input.
+%-------------------------------Bibliographie-----------------------------------
+
+\vspace{-0.32cm}
+\nocite{*}
+\bibliographystyle{unsrt}
+\bibliography{biblio.bib}   % Voir le fichier "biblio.tex"
+\addcontentsline{toc}{section}{Bibliographie}
+
+\input{./5DocSup.tex}
+\end{document}
+%------------------------------Fin du document----------------------------------

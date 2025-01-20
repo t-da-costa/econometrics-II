@@ -1,0 +1,116 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                    Template créé par David Tordeux 2018                    %
+%                                                                            %
+%                                Version 0.3                                 %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{tpl3}[28/09/2018, v0.1, D.Tordeux]
+
+%-----------------------------Extensions--------------------------------------
+
+\RequirePackage[utf8x]{inputenc}
+\RequirePackage[T1]{fontenc}
+\RequirePackage[french]{babel}
+\RequirePackage{graphicx,xcolor}
+\RequirePackage{colortbl}
+\RequirePackage{tikz}
+\RequirePackage[absolute,overlay]{textpos}
+\RequirePackage[left=48pt,%
+                right=42pt,%
+                top=48pt,%
+                bottom=60pt,%
+                headheight=15pt,%
+                headsep=10pt,%
+                letterpaper,twoside]{geometry}%
+
+\usepackage{blindtext}
+\usepackage[scaled=.90]{helvet}% Helvetica, served as a model for arial
+\usepackage{xcolor}
+\usepackage{upgreek}
+\usepackage{titlesec}
+\usepackage{textcomp}
+\usepackage{fancyhdr}
+\usepackage{tcolorbox}
+\usepackage{amsmath}
+\usepackage{array}
+\usepackage{mathtools}
+
+%----------------------Définitions des couleurs-------------------------------
+
+\definecolor{color1}{RGB}{144,238,144}   % Vert clair
+\definecolor{color2}{RGB}{130,130,130}  % Gris clair
+\definecolor{color3}{RGB}{0, 181, 123}    % Vert forêt
+\definecolor{color4}{RGB}{245,245,245}  % Gris très clair
+
+\tcbset{width=\textwidth,boxrule=0pt,colback=color4,arc=0pt,auto outer arc,left=0pt,right=0pt,boxsep=5pt}
+
+%--------------------Définition des environnements----------------------------
+
+\titleformat{\section}
+  {\normalfont\sffamily\large\bfseries}
+  {\thesection}{1em}{}
+  
+\newcommand{\resume}[1]{\begin{tcolorbox}
+{\sffamily{\textbf{\large Résumé - }#1}}
+\end{tcolorbox}
+}
+
+\newcommand{\keywords}[1]{\sffamily{\textbf{Mots clefs - }#1}}
+
+
+\numberwithin{equation}{section}
+
+\newcommand{\remarque}[1]{
+\noindent{\color{color2}\hrule} \vspace{0.2cm}
+\noindent\textbf{\sffamily Remarque : }#1\vspace{0.2cm}
+\noindent{\color{color2}\hrule}\vspace{0.2cm}
+}
+
+%---------------------------------Margin--------------------------------------
+
+% Colored margin box
+\newcommand{\marginmark}{
+\begin{textblock}{2}(15.4,0.93) 
+\begin{tikzpicture}
+\fill[color=color3] (0,0) rectangle (1.4,0.25);
+\end{tikzpicture}
+\end{textblock}
+\begin{textblock}{2}(0,0.93) 
+\begin{tikzpicture}
+\fill[color=color3] (0,0) rectangle (1.,2.2);
+\end{tikzpicture}
+\end{textblock}
+}
+
+\newcommand{\header}[2]{
+{\hfill\textcolor{color2}{\textsc{#1} |~}\textcolor{color3}{\sffamily \bfseries~#2~}}
+}
+
+\newcommand{\logo}{
+\begin{textblock}{6}(0.9,0.93)
+\includegraphics[scale=0.3]{logo.png}
+\end{textblock}
+}
+
+%--------------------------Headers et Footers---------------------------------
+
+\fancypagestyle{plain}{%
+\fancyhf{}
+\fancyfoot[R]{\thepage}
+\fancyfoot[L]{\textsc{\footeri}}
+\renewcommand{\headrulewidth}{0pt}}
+
+\newcommand{\headers}{
+\fancyhf{}
+\fancyhead[LE,RO]{\textsc{\headere}}
+\fancyhead[RE,LO]{\headeri}
+\fancyfoot[RE,LO]{\textsc{\footeri}}
+\fancyfoot[LE,RO]{\thepage}
+}
+
+%---------------------------Bandeau de titre----------------------------------
+
+\newcommand{\titre}[1]{{\strut\hfill \Large \bfseries \sffamily #1}}
+\newcommand{\auteur}[1]{{\strut\hfill\Large \sffamily #1}}
+\newcommand{\formation}[1]{{\strut\hfill  \sffamily #1}}
