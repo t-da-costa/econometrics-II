@@ -125,7 +125,7 @@ plot(modele_reg_acp)
 
 
 ```{r}
-celec.lm=lm(Celec_menages~PIB2020 + Pop1 + DJU + Pelec + IPC + Date, data = celec)
+celec.lm=lm(Celec_menages~PIB2020 + Pop1 + DJU + Pelec + `IPC(base100=2015)` + Date, data = celec)
 par(mfrow=c(2,2))
 plot(celec.lm)
 ```
