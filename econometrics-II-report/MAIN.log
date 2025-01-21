@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2024.12.10)  20 JAN 2025 21:23
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2024.12.10)  22 JAN 2025 00:14
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -1148,7 +1148,7 @@ Package hyperref Info: Link coloring OFF on input line 11.
 \@outlinefile=\write4
 \openout4 = `MAIN.out'.
 
-<logo.png, id=42, 696.201pt x 193.32225pt>
+<logo.png, id=70, 696.201pt x 193.32225pt>
 File: logo.png Graphic file (type png)
 <use logo.png>
 Package pdftex.def Info: logo.png  used on input line 33.
@@ -1179,48 +1179,83 @@ Underfull \hbox (badness 10000) in paragraph at lines 33--33
 
  []
 
-(./0introduction.tex
+
+LaTeX Warning: Optional argument of \twocolumn too tall on page 1.
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [1{/usr/local/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/local/texlive/2023/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}{/usr/local/texlive/2023/texmf-dist/fonts/enc/dvips/base/8r.enc}
+
+
+ <./logo.png>] (./0introduction.tex
 LaTeX Font Info:    Font shape `T1/phv/m/n' will be
 (Font)              scaled to size 10.79993pt on input line 1.
-) (./1theorie.tex) (./2Methodes.tex
-<Images/dispositif_legende.png, id=44, 817.0525pt x 390.45876pt>
-File: Images/dispositif_legende.png Graphic file (type png)
-<use Images/dispositif_legende.png>
-Package pdftex.def Info: Images/dispositif_legende.png  used on input line 6.
-(pdftex.def)             Requested size: 283.11577pt x 135.29825pt.
 
-Overfull \hbox (25.96828pt too wide) in paragraph at lines 6--8
+Underfull \hbox (badness 10000) in paragraph at lines 24--25
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 59--60
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 61--62
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 76--77
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 81--83
+
+ []
+
+[2]
+Underfull \hbox (badness 10000) in paragraph at lines 120--121
+
+ []
+
+<Images/data_base100_2015.jpeg, id=115, 3011.25pt x 1806.75pt>
+File: Images/data_base100_2015.jpeg Graphic file (type jpg)
+<use Images/data_base100_2015.jpeg>
+Package pdftex.def Info: Images/data_base100_2015.jpeg  used on input line 127.
+(pdftex.def)             Requested size: 283.11577pt x 169.85106pt.
+
+Overfull \hbox (25.96828pt too wide) in paragraph at lines 127--128
  [][] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-) (./3Resultats.tex) (./3zprototype.tex) (./4conclusion.tex)
+) (./1theorie.tex) (./2Methodes.tex) (./3Resultats.tex) (./3zprototype.tex) (./4conclusion.tex)
 No file MAIN.bbl.
-(./5DocSup.tex)
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [1{/usr/local/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/local/texlive/2023/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}{/usr/local/texlive/2023/texmf-dist/fonts/enc/dvips/base/8r.enc}
-
-
- <./Images/dispositif_legende.png> <./logo.png>] (./MAIN.aux)
+(./5DocSup.tex) [3 <./Images/data_base100_2015.jpeg>] (./MAIN.aux)
 Package rerunfilecheck Info: File `MAIN.out' has not changed.
-(rerunfilecheck)             Checksum: A957A2F88A740E22DFBBDDD75470C9B4;1320.
+(rerunfilecheck)             Checksum: 86B100598152C26A1BCF7E9A71FC22F6;2367.
  ) 
 Here is how much of TeX's memory you used:
- 26443 strings out of 476025
- 506005 string characters out of 5790016
- 1871388 words of memory out of 5000000
- 46412 multiletter control sequences out of 15000+600000
- 536869 words of font info for 60 fonts, out of 8000000 for 9000
+ 26512 strings out of 476025
+ 506791 string characters out of 5790016
+ 1880388 words of memory out of 5000000
+ 46441 multiletter control sequences out of 15000+600000
+ 541921 words of font info for 74 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 99i,11n,94p,601b,505s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfcc1000.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfrm0900.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb>
-Output written on MAIN.pdf (1 page, 532948 bytes).
+ 99i,17n,94p,1120b,518s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmbsy7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfcc1000.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfti1000.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb>
+Output written on MAIN.pdf (3 pages, 1052592 bytes).
 PDF statistics:
- 115 PDF objects out of 1000 (max. 8388607)
- 87 compressed objects within 1 object stream
- 13 named destinations out of 1000 (max. 500000)
- 95 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 229 PDF objects out of 1000 (max. 8388607)
+ 177 compressed objects within 2 object streams
+ 38 named destinations out of 1000 (max. 500000)
+ 151 words of extra memory for PDF output out of 10000 (max. 10000000)
 

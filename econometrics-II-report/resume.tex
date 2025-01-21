@@ -2,11 +2,32 @@
 
 À faire : 
 \begin{itemize}
+\item Pour des time-series seules : univariate analysis.
+    \begin{itemize}
+        \item \textbf{Tester quelles variables sont stationnaires autour d'une trend déterministe} $\to$ ça nous permet de savoir ensuite si on peut faire des ARIMA, etc. Plot Autocorrelogram by using (partial) autocorrelation function. If the PACF of residuals is out of the confidence interval for a given lag $k$, the process has to be respecified as regards the choice of $p$ or $q$. Ljung-Box + Shapiro Wilk over residuals.
+        \item unit root: determine whether a time series variable is non-stationary and possesses a unit root, meaning it exhibits a stochastic trend. If a time series has a unit root, it implies that the series follows a random walk and that shocks to the system have permanent effects, making it non-mean reverting. \textbf{Elliott-Rothenberg-Stock (ERS) Test and KPSS Test}.
+    \end{itemize}
+\item Multivariate time series = dynamical modelization of a vector of
+time series. 
+\begin{itemize}
+    \item BIC over ARDL model to choose variables and lags.
+    \item If non-stationary, go in log then first difference (approximation of the growth rate). If non-stationary, OLS is inconsistent.
+    \item Reproduire QM1-PS5 en controlant la consommation d'électricité par la taille de la population et en retirant IRC. On choque l'indice des prix à la consommation. Short-run restriction (ordered data) with 10 lags.
+    \item Structural VAR: ordering of the endogenous variables from the most
+    exogeneous: IPC > Prix de l'électricité > Consommation d'électricité (corrigée de la taille de la population) > PIB.
+    \item Si structural VAR, GIRF et choc sur le prix de l'électricité // choc sur l'inflation.
+    \item \textbf{Vector AutoRegression} $\to$ Impulse Response Function, construire des chocs sur le prix de l'électricité $\to$ voir ce qu'il se passe sur la consommation. See E2-PC4.
+    \item Regarder les codes R du chap 2 \href{https://www.dropbox.com/scl/fo/5wj88417eeloxca22qk0b/ACA2WKJ9yp2t9NGVqWXIiks?dl=0&e=1&rlkey=yjyfxpotil48wx9hh4xkdiq68}{ici}.
+    \item Dire que notre SVAR souffre d'un omitted variable bias en n'ayant pas pris en compte l'IRC. Interesting to add a Markov Switching process to account for IRC (up or down). Or use an Error Correction Model if our variables are non-stationary (Co-integrated VAR).
+\end{itemize}
+\item Utiliser le package ts pour gérer les time series.
+\item Account for structural break in 2020? see E2-PC1.
+\item \textbf{Shapiro-Wilk test} for normality of residuals (small samples). Jarque-Bera test is better for large samples. 
 \item On peut se contenter d'interpréter le tableau de régression tout prêt.
 \item Investiguer la méthode LASSO ou RIDGE pour sélectionner les variables. 
-\item Voir si nos variables des AR(1) process
-\item Voir si on peut faire des Vector AutoRegression : $\to$ Impulse Response Function, construire des chocs sur le prix de l'électricité $\to$ voir ce qu'il se passe sur la consommation.
-\item Prévision 2030
-\item ARIMA
+\item Utiliser des BIC plutôt que AIC pour sélectionner les variables.
+\item Transformer IPC en taux d'inflation: $\pi = 100 \cdot \frac{IPC_t - IPC_{t-1}}{IPC_{t-1}}$ ?
+\item Prévision 2030: si on utilise des AR process, on peut aisément faire des prévisions par régressions successives.
+\item Intéressant d'avoir $log(c_{elec})_t = \alpha + \boldsymbol{\beta X_t} + \boldsymbol{\gamma X_{t-1}} + {\chi log(c_{elec})_{t-1}} + \varepsilon$? $\to$ Breusch–Godfrey test for autocorrelation (The regression models to which the test can be applied include cases where lagged values of the dependent variables are used as independent variables in the model's representation for later observations. BG test requires the assumptions of stronger forms of predeterminedness and conditional homoscedasticity.). If excluding $\chi log(c_{elec})_{t-1}$, the Ljung-Box test can be used (valid assumption of strict exogeneity).
 \end{itemize}
 

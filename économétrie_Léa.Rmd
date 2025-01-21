@@ -46,7 +46,7 @@ summary(celec)
 ```{r}
 # Transformer les données en format long
 celec_long <- celec %>%
-  pivot_longer(cols = c(Pelec, IPC, Celec_menages), names_to = "Variable", values_to = "Valeur")
+  pivot_longer(cols = c(Pelec, `IPC(base100=2015)`, Celec_menages), names_to = "Variable", values_to = "Valeur")
 ```
 ```{r}
 # Evolution consommation et prix de l'électricité comparativement à l'IPC
