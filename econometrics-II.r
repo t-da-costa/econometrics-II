@@ -1,9 +1,23 @@
+#===================================#
+#      M2 EEET - Econometrics 2     #
+#            2024-2025              #
+#         DA COSTA & GUILLAUT       #
+#                                   #
+#===================================#
+
+#%============================%=
+# LIBRAIRIES ####
+#%============================%=
 # Importation des librairies nécessaires
 library(readxl)
 library(dplyr)
 library(ggplot2)
 library(tidyr)
 
+
+#%============================%=
+# DATA LOADING ####
+#%============================%=
 # Téléchargement des données dans un dataframe nommé celec
 celec <- read_excel("celec_menages.xlsx", col_names = TRUE)
 
@@ -13,6 +27,11 @@ celec <- read_excel("celec_menages.xlsx", col_names = TRUE)
 # Pelec (IEA)	  Prix de l'électricité des ménages (euro/MWh)
 # DJU   (MTES)    Indice de rigueur du climat
 # Celec (MTES)    Cons. Elec GWh (observée) des ménages
+
+
+#%=================================================%=
+# PREPARING SET FOR EXPLORATION AND REGRESSION ####
+#%=================================================%=
 
 # Renommer les colonnes pour une meilleure clarté
 celec <- celec %>%
@@ -26,12 +45,12 @@ celec <- celec %>%
 
 # Structure des données
 str(celec)
-
 # Synthèse descriptive des données
 summary(celec)
 
+#%===========================================
+# Going base 100 for all variables in 2015
 
-# Normalisation en base 100 à partir de l'année 2015
 base_2015 <- celec %>% filter(Date == 2015)
 
 celec <- celec %>%
@@ -64,3 +83,19 @@ ggplot(celec_long, aes(x = Date, y = value, color = variable)) +
 
 # Enregistrer le plot
 ggsave("econometrics-II-report/Images/data_base100_2015.jpeg", width = 10, height = 6)
+
+
+#%===========================================
+# Adding new variables for the regression
+
+# Le PIB est en euro constant 2020 mais l'inflation en base 2015 : on doit ajuster le PIB en 2015
+
+celec <- celec %>%
+    mutate(
+        elec_cons_pc = elec_cons / Population, # pc = per capita
+        PIB2015 = PIB2020 * (IPC[Date == 2015] / IPC[Date == 2020]), #en milliards d'euros 2015
+        PIB2015_pc = PIB2015 / Population, #in 2015 10^9 euros per capita, 
+        Pelec_euro2015 = Pelec * (IPC[Date == 2015] / IPC), # Prix de l'électricité en euro constant 2015
+    )
+
+summary(celec)
