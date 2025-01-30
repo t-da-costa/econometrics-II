@@ -15,8 +15,7 @@ On n'a \textit{a priori} pas d'information sur la relation analytique entre les 
     \item Relation économétrique entre les variables. 
     \item Prévision de la variable dépendante.
 \end{enumerate}
-The given dataset is composed of 6 time series over electricity consumption, GDP, population, inflation, electricity price, climate index. The data is available from 1990 to 2021, with 32 observations. 
-% We first tried to find more granular data, \textit{e.g.} quarterly one, but no source could provide electricity information over the 1990-2021 time period (the IAE has been charging for data since january 2025, Eurostat doesn't have reliable french data before 2005)\footnote{For inflation and GDP, we could have used INSEE database, \href{https://www.insee.fr/fr/statistiques/serie/001763852#Telechargement}{here} and \href{https://www.insee.fr/fr/statistiques/8196636?sommaire=8182908#consulter}{there}.}. From this situation, we already know that, dealing low-frequency data, we will not be able to include annual variability in our analysis, which could have been interesting for studying seasonal effects on electricity. We also will not be able to use moving average filter (\textit{e.g.} Hodrick-Prescott) to identify trends, economic cycles, and fluctuations in the GDP.
+
 
 \subsection{Notes cours C. Doz}
 
@@ -185,30 +184,7 @@ effet de covariance.
 "En effet, d’un point de vue économique, la consommation d’un bien dépend d’un effet de revenu et d’un effet de prix auxquels peuvent s’ajouter, le cas échéant, d’autres effets. Ici, on conserve la spécification la plus
 simple où l’utilité d’un bien dépend d’un effet de richesse et d’un effet prix." \\
 
-\textit{Dans notre cas, on ajoute l'effet de l'IRC et approxime les revenus par le PIB\footnote{Il existe une relation positive entre le PIB par habitant et le revenu des ménages par habitant, modulée par les politiques fiscales, la répartition des revenus, les structures économiques et la dynamique du marché du travail.
-\begin{enumerate}
-    \item Relation Positive:
-    \begin{itemize}
-        \item Un PIB/habitant élevé est généralement associé à un revenu des ménages plus élevé, car la croissance économique favorise l’emploi, les salaires et les opportunités économiques.
-        \item Plus l’économie produit de biens et services, plus les revenus distribués dans l’économie sont susceptibles d’augmenter.
-    \end{itemize}
-    \item Différences en raison des prélèvements et transferts
-    \begin{itemize}
-        \item Taux d’imposition et de cotisations sociales : Un PIB élevé peut ne pas se traduire directement par un revenu élevé des ménages si les impôts sont importants.
-        \item Redistribution : Des politiques de redistribution (prestations sociales, aides, etc.) peuvent influencer la relation entre les deux.
-        \item Revenus des entreprises : Une partie du PIB est réinvestie par les entreprises sous forme de profits et ne se traduit pas directement en revenu des ménages.
-    \end{itemize}
-    \item Effets du marché du travail
-    \begin{itemize}
-        \item Si le taux de chômage est élevé, le PIB/habitant peut être relativement stable, mais le revenu des ménages peut être faible en raison d’un accès limité aux revenus du travail.
-        \item La productivité du travail joue un rôle clé dans le lien entre le PIB et les salaires.
-    \end{itemize}
-    \item Effets sectoriels
-    \begin{itemize}
-        \item Un PIB dominé par des secteurs capitalistiques (finance, industrie lourde) peut générer un écart important entre PIB/hab et revenu/hab car les revenus du capital sont concentrés et peu redistribués aux ménages.
-        \item À l’inverse, une économie fondée sur les services à forte intensité de main-d’œuvre peut avoir un lien plus direct entre PIB et revenu des ménages.
-    \end{itemize}
-\end{enumerate}}}.
+\textit{Dans notre cas, on ajoute l'effet de l'IRC et approxime les revenus par le PIB}.
 
 \begin{equation}
     \ln{\frac{c_{elec}}{pop}} = \alpha + \beta_1 \ln{\frac{{PIB}}{pop}} + \beta_2 \ln{\frac{prix_{elec}}{IPC}} + \beta_3 IRC + \varepsilon
@@ -221,25 +197,15 @@ Les coefficients $\beta_1$ et $\beta_2$ sont, respectivement, l’élasticité d
 d’électricité par rapport au revenu et l’élasticité de la consommation d’électricité par rapport au prix. Ces coefficients mesurent la variation en pourcentage de la
 consommation d’électricité par rapport, respectivement, à une variation en pourcentage du revenu et la variation et à une variation en pourcentage des prix. \\
 
-On fait ensuite un test de Chow sur 2009 (crise économique ?; mais \textbf{se renseigner aussi sur la mise en place de la libéralisation des prix}\footnote{
-    \begin{itemize}
-        \item juillet 2007 : éligibilité de tous les consommateurs (dont les clients résidentiels) au marché concurrentiel de l’électricité.
-        \item Entrée en vigueur du traité de Lisbonne le 1er décembre 2009.
-        \item 7 décembre 2010 : loi NOME (Nouvelle Organisation du Marché de l’Électricité) qui vise à favoriser la concurrence sur le marché de l’électricité (\textit{e.g.} mise en place de l'accès régulé à l'électricité nucléaire historique).
-\end{itemize}}).
+On fait ensuite un test de Chow sur 2009.
 
 Cusum est peu puissant (on accepte facilement l’hypothèse nulle). On peut ceci dit ajouter un test de Chow pas à pas entre 2007 et 2012. \\
 
 Puis test de Cusum-square pour attester du structural break. On refait une régression sur 2009-2020, et on renouvelle le test de Cusum-square pour vérifier la stabilité temporelle du modèle. 
 
-\subsection{Our results}
-\begin{figure}[h]
-    \centering
-      \includegraphics[width=0.54\textwidth]{Images/data_base100_2015.jpeg}
-      \caption{Évolution des variables en base 100.}
-          \label{var}
-  \end{figure}
 
-Graphique 1 : évolution des variables en base 100. On peut déjà intuiter une influence de la croissance du PIB, de la population et de l'indice des prix à la consommation (IPC) sur la demande d'électricité. On remarque aussi comme les fluctuations de l'Indice de Rigueur Climatique (IRC) viennent influencer la consommation d'électricité des ménages. On note enfin que la croissance forte du prix de l'électricité depuis 2009 semble corrélée à la baisse tendancielle du taux de croissance de la consommation d'électricité. Soulignons qu'à partir de cette période, le taux de croissance des prix dépasse celui de l'inflation.
 
-\section{Introduction}
+\section{Critique}
+Utiliser le déflateur du PIB plutôt que l'IPC pour tenir compte des changements dans la composition des biens et services produits. 
+
+Le déflateur du PIB est un indice de prix qui reflète les variations des prix de tous les biens et services produits dans une économie. Contrairement à d’autres indices (comme l’IPC, qui se concentre sur un panier fixe de biens), le déflateur du PIB tient compte des changements dans la composition des biens et services produits.

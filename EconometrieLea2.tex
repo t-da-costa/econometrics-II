@@ -1,0 +1,1031 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Econometry new},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Econometry new}
+\author{}
+\date{\vspace{-2.5em}2025-01-25}
+
+\begin{document}
+\maketitle
+
+\subsection{Importation des données}\label{importation-des-donnuxe9es}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#importation des différentes librairies nécessaires pour la suite du projet}
+\FunctionTok{options}\NormalTok{(}\AttributeTok{repos =} \FunctionTok{c}\NormalTok{(}\AttributeTok{CRAN =} \StringTok{"https://cloud.r{-}project.org"}\NormalTok{))}
+\FunctionTok{install.packages}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{"caret"}\NormalTok{, }\StringTok{"skedastic"}\NormalTok{, }\StringTok{"nortest"}\NormalTok{, }\StringTok{"olsrr"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Installing packages into '/Users/orlando/Library/R/arm64/4.3/library'
+## (as 'lib' is unspecified)
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## The downloaded binary packages are in
+##  /var/folders/jq/nw67h8bx4pq6859hfrxslj7w0000gn/T//RtmpJ2Hnba/downloaded_packages
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(ggplot2)}
+\FunctionTok{library}\NormalTok{(cowplot)}
+\FunctionTok{library}\NormalTok{(car)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Loading required package: carData
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(carData)}
+\FunctionTok{library}\NormalTok{(caret)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'caret' was built under R version 4.3.3
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: lattice
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(FactoMineR)}
+\FunctionTok{library}\NormalTok{(readxl)}
+\FunctionTok{library}\NormalTok{(dplyr)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Attaching package: 'dplyr'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:car':
+## 
+##     recode
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyr)}
+\FunctionTok{library}\NormalTok{(lmtest) }\CommentTok{\#pour Breusch{-}Pagan}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Loading required package: zoo
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'zoo'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     as.Date, as.Date.numeric
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(skedastic) }\CommentTok{\#pour White}
+\FunctionTok{library}\NormalTok{(nortest) }\CommentTok{\#pour Anderson{-}Darling}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'nortest' was built under R version 4.3.3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(olsrr) }\CommentTok{\#pour White}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'olsrr' was built under R version 4.3.3
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'olsrr'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:datasets':
+## 
+##     rivers
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#ouverture des jeux de données de consommation d\textquotesingle{}électricité des ménages}
+\NormalTok{celec}\OtherTok{\textless{}{-}}\FunctionTok{read\_excel}\NormalTok{(}\StringTok{"celec\_menages.xlsx"}\NormalTok{, }\AttributeTok{col\_names =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#nous regardons la structure des données de la table "celec"}
+\FunctionTok{str}\NormalTok{(celec)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## tibble [32 x 7] (S3: tbl_df/tbl/data.frame)
+##  $ Date             : num [1:32] 1990 1991 1992 1993 1994 ...
+##  $ IPC(base100=2015): num [1:32] 67.4 69.6 71.2 72.7 73.9 75.3 76.8 77.7 78.2 78.6 ...
+##  $ PIB2020          : num [1:32] 1566 1586 1610 1604 1642 ...
+##  $ Pelec            : num [1:32] 125 121 124 126 127 ...
+##  $ Pop1             : num [1:32] 56708831 56975597 57239847 57467085 57658772 ...
+##  $ DJU              : num [1:32] 0.96 1.167 1.076 1.076 0.922 ...
+##  $ Celec_menages    : num [1:32] 96.9 106.8 109.6 111.5 111.2 ...
+\end{verbatim}
+
+IPC : indice annuel des prix à la consommation PIB2020 : produit
+intérieur brut en euros de 2020 Pelec : Prix de l'électricité des
+ménages (euro/MWh) Pop1 : population France métropolitaine DJU : Indice
+de rigueur du climat (MTES) Celec\_menages : consommation électrice GWh
+observée
+
+\#\%=================================================\%= \#\# PREPARING
+SET FOR EXPLORATION AND REGRESSION \#\#\#\#
+\#\%=================================================\%=
+
+\subsection{Renommer les colonnes pour une meilleure
+clarté}\label{renommer-les-colonnes-pour-une-meilleure-clartuxe9}
+
+\subsection{IRC = Indice de Rigueur
+Climatique.}\label{irc-indice-de-rigueur-climatique.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ celec }\OtherTok{\textless{}{-}}\NormalTok{ celec }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{rename}\NormalTok{(}
+        \AttributeTok{IRC =}\NormalTok{ DJU,}
+        \AttributeTok{Population =}\NormalTok{ Pop1,}
+        \AttributeTok{elec\_cons =}\NormalTok{ Celec\_menages,}
+        \AttributeTok{IPC =} \StringTok{\textasciigrave{}}\AttributeTok{IPC(base100=2015)}\StringTok{\textasciigrave{}}\NormalTok{,}
+\NormalTok{    )}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Synthèse descriptive des
+données}\label{synthuxe8se-descriptive-des-donnuxe9es}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(celec)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       Date           IPC            PIB2020         Pelec      
+##  Min.   :1990   Min.   : 67.40   Min.   :1566   Min.   :109.9  
+##  1st Qu.:1998   1st Qu.: 78.08   1st Qu.:1792   1st Qu.:114.1  
+##  Median :2006   Median : 88.61   Median :2149   Median :124.5  
+##  Mean   :2006   Mean   : 88.12   Mean   :2065   Mean   :133.6  
+##  3rd Qu.:2013   3rd Qu.: 99.58   3rd Qu.:2303   3rd Qu.:148.4  
+##  Max.   :2021   Max.   :106.45   Max.   :2505   Max.   :193.1  
+##    Population            IRC           elec_cons     
+##  Min.   :56708831   Min.   :0.8311   Min.   : 96.91  
+##  1st Qu.:58350214   1st Qu.:0.9322   1st Qu.:122.49  
+##  Median :61389492   Median :1.0034   Median :142.46  
+##  Mean   :61214776   Mean   :0.9995   Mean   :138.43  
+##  3rd Qu.:63938216   3rd Qu.:1.0475   3rd Qu.:156.87  
+##  Max.   :65613522   Max.   :1.1943   Max.   :166.67
+\end{verbatim}
+
+\#\%=========================================== \#\# Going base 100 for
+all variables in 2015
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{base\_2015 }\OtherTok{\textless{}{-}}\NormalTok{ celec }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{filter}\NormalTok{(Date }\SpecialCharTok{==} \DecValTok{2015}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{celec }\OtherTok{\textless{}{-}}\NormalTok{ celec }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{mutate}\NormalTok{(}
+        \AttributeTok{PIB2020\_base100\_2015 =}\NormalTok{ PIB2020 }\SpecialCharTok{/}\NormalTok{ base\_2015}\SpecialCharTok{$}\NormalTok{PIB2020 }\SpecialCharTok{*} \DecValTok{100}\NormalTok{,}
+        \AttributeTok{Pelec\_base100\_2015 =}\NormalTok{ Pelec }\SpecialCharTok{/}\NormalTok{ base\_2015}\SpecialCharTok{$}\NormalTok{Pelec }\SpecialCharTok{*} \DecValTok{100}\NormalTok{,}
+        \AttributeTok{Population\_base100\_2015 =}\NormalTok{ Population }\SpecialCharTok{/}\NormalTok{ base\_2015}\SpecialCharTok{$}\NormalTok{Population }\SpecialCharTok{*} \DecValTok{100}\NormalTok{,}
+        \AttributeTok{IRC\_base100\_2015 =}\NormalTok{ IRC }\SpecialCharTok{/}\NormalTok{ base\_2015}\SpecialCharTok{$}\NormalTok{IRC }\SpecialCharTok{*} \DecValTok{100}\NormalTok{,}
+        \AttributeTok{elec\_cons\_base100\_2015 =}\NormalTok{ elec\_cons }\SpecialCharTok{/}\NormalTok{ base\_2015}\SpecialCharTok{$}\NormalTok{elec\_cons }\SpecialCharTok{*} \DecValTok{100}\NormalTok{, }
+        \AttributeTok{IPC\_base100\_2015 =}\NormalTok{ IPC  }\CommentTok{\# L\textquotesingle{}IPC est déjà en base 100}
+\NormalTok{    )}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Tracer toutes les colonnes qui se terminent par
+base100\_2015 en fonction de
+Date}\label{tracer-toutes-les-colonnes-qui-se-terminent-par-base100_2015-en-fonction-de-date}
+
+\subsection{Convertir les données en format long pour
+ggplot}\label{convertir-les-donnuxe9es-en-format-long-pour-ggplot}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{celec\_long }\OtherTok{\textless{}{-}}\NormalTok{ celec }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{select}\NormalTok{(Date, }\FunctionTok{ends\_with}\NormalTok{(}\StringTok{"base100\_2015"}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{pivot\_longer}\NormalTok{(}\AttributeTok{cols =} \SpecialCharTok{{-}}\NormalTok{Date, }\AttributeTok{names\_to =} \StringTok{"variable"}\NormalTok{, }\AttributeTok{values\_to =} \StringTok{"value"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{mutate}\NormalTok{(}\AttributeTok{variable =} \FunctionTok{gsub}\NormalTok{(}\StringTok{"\_base100\_2015"}\NormalTok{, }\StringTok{""}\NormalTok{, variable))}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Tracer les données}\label{tracer-les-donnuxe9es}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(celec\_long, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Date, }\AttributeTok{y =}\NormalTok{ value, }\AttributeTok{color =}\NormalTok{ variable)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{linewidth =} \FloatTok{0.8}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{size =} \DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"red"}\NormalTok{, }\StringTok{"blue"}\NormalTok{, }\StringTok{"green"}\NormalTok{, }\StringTok{"purple"}\NormalTok{, }\StringTok{"orange"}\NormalTok{, }\StringTok{"\#00c3ff"}\NormalTok{)) }\SpecialCharTok{+}
+    \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Évolution temporelle des variables (normalisées en base 100)"}\NormalTok{,}
+       \AttributeTok{x =} \StringTok{"Date"}\NormalTok{,}
+       \AttributeTok{y =} \StringTok{"Valeur (base 100 en 2015)"}\NormalTok{,}
+       \AttributeTok{color =} \StringTok{"Variable"}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{theme\_minimal}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{EconometrieLea2_files/figure-latex/unnamed-chunk-9-1.pdf}}
+
+\#\%=========================================== \# Adding new variables
+for the regression
+
+\section{Le PIB est en euro constant 2020 mais l'inflation en base 2015
+: on doit ajuster le PIB en
+2015}\label{le-pib-est-en-euro-constant-2020-mais-linflation-en-base-2015-on-doit-ajuster-le-pib-en-2015}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{celec }\OtherTok{\textless{}{-}}\NormalTok{ celec }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{mutate}\NormalTok{(}
+        \AttributeTok{elec\_cons\_pc =}\NormalTok{ elec\_cons }\SpecialCharTok{/}\NormalTok{ Population, }\CommentTok{\# pc = per capita}
+        \AttributeTok{PIB2015 =}\NormalTok{ PIB2020 }\SpecialCharTok{*}\NormalTok{ (IPC[Date }\SpecialCharTok{==} \DecValTok{2015}\NormalTok{] }\SpecialCharTok{/}\NormalTok{ IPC[Date }\SpecialCharTok{==} \DecValTok{2020}\NormalTok{]), }\CommentTok{\#en milliards d\textquotesingle{}euros 2015}
+        \AttributeTok{PIB2015\_pc =}\NormalTok{ PIB2015 }\SpecialCharTok{/}\NormalTok{ Population, }\CommentTok{\#in 2015 10\^{}9 euros per capita, }
+        \AttributeTok{Pelec\_euro2015 =}\NormalTok{ Pelec }\SpecialCharTok{*}\NormalTok{ (IPC[Date }\SpecialCharTok{==} \DecValTok{2015}\NormalTok{] }\SpecialCharTok{/}\NormalTok{ IPC), }\CommentTok{\# Prix de l\textquotesingle{}électricité en euro constant 2015}
+\NormalTok{    )}
+\end{Highlighting}
+\end{Shaded}
+
+\#\%==========================================================================\%=
+\#\# PREMIERE REGRESSION GLOBALE SANS PRISE EN COMPTE DE LA RUPTURE EN
+2009 \#\#\#\#
+\#\%==========================================================================\%=
+
+\section{Régression}\label{ruxe9gression}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{celec.lm}\OtherTok{=}\FunctionTok{lm}\NormalTok{(elec\_cons}\SpecialCharTok{\textasciitilde{}}\NormalTok{PIB2015 }\SpecialCharTok{+}\NormalTok{ Population }\SpecialCharTok{+}\NormalTok{ IRC }\SpecialCharTok{+}\NormalTok{ Pelec\_euro2015 }\SpecialCharTok{+}\NormalTok{ IPC }\SpecialCharTok{+}\NormalTok{ Date, }\AttributeTok{data =}\NormalTok{ celec)}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(celec.lm)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{EconometrieLea2_files/figure-latex/unnamed-chunk-11-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(celec.lm)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = elec_cons ~ PIB2015 + Population + IRC + Pelec_euro2015 + 
+##     IPC + Date, data = celec)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -5.8659 -1.3512  0.4899  1.6491  5.1223 
+## 
+## Coefficients:
+##                  Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)    -4.905e+03  1.531e+03  -3.205  0.00367 ** 
+## PIB2015        -1.389e-02  1.479e-02  -0.939  0.35671    
+## Population     -3.636e-07  2.591e-06  -0.140  0.88953    
+## IRC             4.093e+01  6.044e+00   6.771 4.26e-07 ***
+## Pelec_euro2015 -2.348e-01  4.814e-02  -4.876 5.13e-05 ***
+## IPC             8.673e-02  7.253e-01   0.120  0.90577    
+## Date            2.533e+00  7.893e-01   3.210  0.00363 ** 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 2.742 on 25 degrees of freedom
+## Multiple R-squared:  0.9847, Adjusted R-squared:  0.981 
+## F-statistic: 267.5 on 6 and 25 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+Les variables PIB2015, Population et IPC ont des p-value supérieures à
+5\% donc nous les retirons.
+
+\section{Deuxième régression}\label{deuxiuxe8me-ruxe9gression}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{celec.lm2}\OtherTok{=}\FunctionTok{lm}\NormalTok{(elec\_cons}\SpecialCharTok{\textasciitilde{}}\NormalTok{IRC }\SpecialCharTok{+}\NormalTok{ Pelec\_euro2015 }\SpecialCharTok{+}\NormalTok{ Date, }\AttributeTok{data =}\NormalTok{ celec)}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(celec.lm2)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{EconometrieLea2_files/figure-latex/unnamed-chunk-12-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(celec.lm2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = elec_cons ~ IRC + Pelec_euro2015 + Date, data = celec)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -6.1082 -1.5322  0.5801  1.6865  5.2570 
+## 
+## Coefficients:
+##                  Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)    -4.124e+03  1.116e+02 -36.967  < 2e-16 ***
+## IRC             4.122e+01  5.700e+00   7.231 7.16e-08 ***
+## Pelec_euro2015 -2.021e-01  2.447e-02  -8.258 5.49e-09 ***
+## Date            2.120e+00  5.434e-02  39.019  < 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 2.654 on 28 degrees of freedom
+## Multiple R-squared:  0.9839, Adjusted R-squared:  0.9822 
+## F-statistic: 570.5 on 3 and 28 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\section{Vérification de la normalité des
+résidus}\label{vuxe9rification-de-la-normalituxe9-des-ruxe9sidus}
+
+\subsection{Histogramme des résidus}\label{histogramme-des-ruxe9sidus}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{hist}\NormalTok{(}\FunctionTok{residuals}\NormalTok{(celec.lm2), }\AttributeTok{main=}\StringTok{"Histogramme des résidus"}\NormalTok{, }\AttributeTok{xlab=}\StringTok{"Résidus"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{EconometrieLea2_files/figure-latex/unnamed-chunk-13-1.pdf}}
+\#\# Test de Shapiro-Wilk
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{shapiro.test}\NormalTok{(}\FunctionTok{residuals}\NormalTok{(celec.lm2))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Shapiro-Wilk normality test
+## 
+## data:  residuals(celec.lm2)
+## W = 0.9807, p-value = 0.8196
+\end{verbatim}
+
+Normalité validée
+
+\subsection{Test d'Anderson-Darling}\label{test-danderson-darling}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ad.test}\NormalTok{(}\FunctionTok{residuals}\NormalTok{(celec.lm2))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Anderson-Darling normality test
+## 
+## data:  residuals(celec.lm2)
+## A = 0.31579, p-value = 0.5251
+\end{verbatim}
+
+Normalité validée
+
+\section{Vérification de
+l'hétéroscédasticité}\label{vuxe9rification-de-lhuxe9tuxe9roscuxe9dasticituxe9}
+
+\subsection{Test de Breusch-Pagan}\label{test-de-breusch-pagan}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{bptest}\NormalTok{(celec.lm2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  studentized Breusch-Pagan test
+## 
+## data:  celec.lm2
+## BP = 1.8721, df = 3, p-value = 0.5994
+\end{verbatim}
+
+Homoscédasticité validée
+
+\subsection{Test de White}\label{test-de-white}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{bptest}\NormalTok{(celec.lm2, }\SpecialCharTok{\textasciitilde{}} \FunctionTok{fitted}\NormalTok{(celec.lm2) }\SpecialCharTok{+} \FunctionTok{I}\NormalTok{(}\FunctionTok{fitted}\NormalTok{(celec.lm2)))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  studentized Breusch-Pagan test
+## 
+## data:  celec.lm2
+## BP = 0.12413, df = 1, p-value = 0.7246
+\end{verbatim}
+
+\section{Test d'autocorrélation}\label{test-dautocorruxe9lation}
+
+\subsection{Test de Breusch-Godfrey}\label{test-de-breusch-godfrey}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{bgtest}\NormalTok{(celec.lm2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Breusch-Godfrey test for serial correlation of order up to 1
+## 
+## data:  celec.lm2
+## LM test = 0.038089, df = 1, p-value = 0.8453
+\end{verbatim}
+
+Pas d'autocorrélation.
+
+\section{Etude de la
+multicolinéarité}\label{etude-de-la-multicolinuxe9arituxe9}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{vif}\NormalTok{(celec.lm2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##            IRC Pelec_euro2015           Date 
+##       1.147436       1.020445       1.143243
+\end{verbatim}
+
+VIF pas élevé (inférieur à 5) donc pas d'autocorrelation notable.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{vif}\NormalTok{(celec.lm)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        PIB2015     Population            IRC Pelec_euro2015            IPC 
+##      73.898719     239.556870       1.209056       3.701178     304.932156 
+##           Date 
+##     226.017040
+\end{verbatim}
+
+Dans le premier modèle, les VIF étaient très élevées.
+
+-\textgreater{} Donc pas besoin de passer par du Lasso et de l'ACP.
+
+\section{Diagnostic visuel}\label{diagnostic-visuel}
+
+\subsection{Graphique des valeurs ajustées vs
+résidus}\label{graphique-des-valeurs-ajustuxe9es-vs-ruxe9sidus}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(}\FunctionTok{fitted}\NormalTok{(celec.lm2), }\FunctionTok{residuals}\NormalTok{(celec.lm2), }\AttributeTok{main=}\StringTok{"Valeurs ajustées vs Résidus"}\NormalTok{, }\AttributeTok{xlab=}\StringTok{"Valeurs ajustées"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"Résidus"}\NormalTok{)}
+\FunctionTok{abline}\NormalTok{(}\AttributeTok{h=}\DecValTok{0}\NormalTok{, }\AttributeTok{col=}\StringTok{"red"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{EconometrieLea2_files/figure-latex/unnamed-chunk-21-1.pdf}}
+
+Perfetto
+
+\subsection{QQ-plot des résidus}\label{qq-plot-des-ruxe9sidus}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{qqnorm}\NormalTok{(}\FunctionTok{residuals}\NormalTok{(celec.lm2))}
+\FunctionTok{qqline}\NormalTok{(}\FunctionTok{residuals}\NormalTok{(celec.lm2), }\AttributeTok{col=}\StringTok{"red"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{EconometrieLea2_files/figure-latex/unnamed-chunk-22-1.pdf}}
+ça serpente un peu quand même.
+
+\#\%==============================================================\%=
+\#\# DEUXIEME MODELE AVEC PRISE EN COMPTE DE LA RUPTURE EN 2009 \#\#\#\#
+\#\%==============================================================\%=
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{celec.lm3}\OtherTok{=}\FunctionTok{lm}\NormalTok{(}\FunctionTok{log}\NormalTok{(elec\_cons\_pc)}\SpecialCharTok{\textasciitilde{}}\FunctionTok{log}\NormalTok{(PIB2015\_pc) }\SpecialCharTok{+} \FunctionTok{log}\NormalTok{(Pelec\_euro2015) }\SpecialCharTok{+}\NormalTok{ IRC , }\AttributeTok{data =}\NormalTok{ celec)}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(celec.lm3)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{EconometrieLea2_files/figure-latex/unnamed-chunk-23-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(celec.lm3)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = log(elec_cons_pc) ~ log(PIB2015_pc) + log(Pelec_euro2015) + 
+##     IRC, data = celec)
+## 
+## Residuals:
+##       Min        1Q    Median        3Q       Max 
+## -0.061256 -0.015346  0.004301  0.018180  0.071845 
+## 
+## Coefficients:
+##                     Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)         -2.70320    0.54414  -4.968 3.03e-05 ***
+## log(PIB2015_pc)      1.00773    0.05931  16.992 2.78e-16 ***
+## log(Pelec_euro2015) -0.03134    0.04537  -0.691 0.495441    
+## IRC                  0.28438    0.06487   4.384 0.000149 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.02995 on 28 degrees of freedom
+## Multiple R-squared:  0.9279, Adjusted R-squared:  0.9202 
+## F-statistic: 120.2 on 3 and 28 DF,  p-value: 4.273e-16
+\end{verbatim}
+
+The coefficients β1 and β2 are, respectively, the income elasticity of
+electricity consumption and the price elasticity of electricity
+consumption. These coefficients measure the percentage change in
+electricity consumption in relation, respectively, to a percentage
+change in income and a percentage change in prices. Here β1 is estimated
+1.01 and β2 is estimated -0.03. Chow test could be not applicable if
+residuals are not independant.
+
+test de Chow pas immédiatement applicable ? -\textgreater{} les résidus
+du modèle doivent être indépendants et ne pas montrer de tendance
+-\textgreater{} or les graphs sont un peu dégueux ?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Création de deux groupes pour application du test de Chow}
+\NormalTok{groupe1 }\OtherTok{\textless{}{-}} \FunctionTok{subset}\NormalTok{(celec, Date}\SpecialCharTok{\textless{}}\DecValTok{2009}\NormalTok{)}
+\NormalTok{groupe2 }\OtherTok{\textless{}{-}} \FunctionTok{subset}\NormalTok{(celec, Date}\SpecialCharTok{\textgreater{}=}\DecValTok{2009}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{lm1\_chow }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(}\FunctionTok{log}\NormalTok{(elec\_cons\_pc) }\SpecialCharTok{\textasciitilde{}} \FunctionTok{log}\NormalTok{(PIB2015\_pc) }\SpecialCharTok{+} \FunctionTok{log}\NormalTok{(Pelec\_euro2015) }\SpecialCharTok{+}\NormalTok{ IRC, }\AttributeTok{data =}\NormalTok{ groupe1)}
+\NormalTok{lm2\_chow }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(}\FunctionTok{log}\NormalTok{(elec\_cons\_pc) }\SpecialCharTok{\textasciitilde{}} \FunctionTok{log}\NormalTok{(PIB2015\_pc) }\SpecialCharTok{+} \FunctionTok{log}\NormalTok{(Pelec\_euro2015) }\SpecialCharTok{+}\NormalTok{ IRC, }\AttributeTok{data =}\NormalTok{ groupe2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Ajout de l\textquotesingle{}indication groupe 1 et groupe 2 dans la table celec}
+\NormalTok{celec}\SpecialCharTok{$}\NormalTok{group }\OtherTok{\textless{}{-}} \FunctionTok{ifelse}\NormalTok{(celec}\SpecialCharTok{$}\NormalTok{Date }\SpecialCharTok{\textless{}} \DecValTok{2009}\NormalTok{, }\StringTok{"groupe1"}\NormalTok{, }\StringTok{"groupe2"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{lm\_global }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(}\FunctionTok{log}\NormalTok{(elec\_cons\_pc) }\SpecialCharTok{\textasciitilde{}} \FunctionTok{log}\NormalTok{(PIB2015\_pc) }\SpecialCharTok{*}\NormalTok{ group }\SpecialCharTok{+}
+                                  \FunctionTok{log}\NormalTok{(Pelec\_euro2015) }\SpecialCharTok{*}\NormalTok{ group }\SpecialCharTok{+}
+\NormalTok{                                  IRC }\SpecialCharTok{*}\NormalTok{ group,}
+                \AttributeTok{data =}\NormalTok{ celec)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Test de Chow}
+\FunctionTok{linearHypothesis}\NormalTok{(lm\_global, }
+                 \FunctionTok{c}\NormalTok{(}\StringTok{"log(PIB2015\_pc):groupgroupe2 = 0"}\NormalTok{,}
+                   \StringTok{"groupgroupe2:log(Pelec\_euro2015) = 0"}\NormalTok{,}
+                   \StringTok{"groupgroupe2:IRC = 0"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Linear hypothesis test
+## 
+## Hypothesis:
+## log(PIB2015_pc):groupgroupe2 = 0
+## groupgroupe2:log(Pelec_euro2015) = 0
+## groupgroupe2:IRC = 0
+## 
+## Model 1: restricted model
+## Model 2: log(elec_cons_pc) ~ log(PIB2015_pc) * group + log(Pelec_euro2015) * 
+##     group + IRC * group
+## 
+##   Res.Df       RSS Df Sum of Sq      F    Pr(>F)    
+## 1     27 0.0229376                                  
+## 2     24 0.0093388  3  0.013599 11.649 6.603e-05 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+The Chow test returns a p-value lower than 0.05, so we can validate a
+break in 2009. This implies that we need to different models to fit with
+the data before and after 2009. Thus, our projection for 2030 have to be
+estimated using the model fitting data after 2009.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Creation de la table qui ne contient que les données supérieures à 2009}
+\NormalTok{celec\_2009 }\OtherTok{\textless{}{-}}\NormalTok{ celec[celec}\SpecialCharTok{$}\NormalTok{Date }\SpecialCharTok{\textgreater{}=} \DecValTok{2009}\NormalTok{, ]}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Modele de régression à partir de
+2009}\label{modele-de-ruxe9gression-uxe0-partir-de-2009}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{celec.lm4}\OtherTok{=}\FunctionTok{lm}\NormalTok{(}\FunctionTok{log}\NormalTok{(elec\_cons\_pc)}\SpecialCharTok{\textasciitilde{}}\FunctionTok{log}\NormalTok{(PIB2015\_pc) }\SpecialCharTok{+} \FunctionTok{log}\NormalTok{(Pelec\_euro2015) }\SpecialCharTok{+}\NormalTok{ IRC, }\AttributeTok{data =}\NormalTok{ celec\_2009)}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(celec.lm4)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{EconometrieLea2_files/figure-latex/unnamed-chunk-30-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(celec.lm4)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = log(elec_cons_pc) ~ log(PIB2015_pc) + log(Pelec_euro2015) + 
+##     IRC, data = celec_2009)
+## 
+## Residuals:
+##       Min        1Q    Median        3Q       Max 
+## -0.013633 -0.004151 -0.002211  0.004489  0.013742 
+## 
+## Coefficients:
+##                      Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)         -17.55915    1.48111 -11.855 8.54e-07 ***
+## log(PIB2015_pc)      -0.31061    0.13127  -2.366 0.042169 *  
+## log(Pelec_euro2015)   0.21582    0.03476   6.208 0.000157 ***
+## IRC                   0.36781    0.02792  13.172 3.47e-07 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.00939 on 9 degrees of freedom
+## Multiple R-squared:  0.9509, Adjusted R-squared:  0.9346 
+## F-statistic: 58.12 on 3 and 9 DF,  p-value: 3.26e-06
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{step}\NormalTok{(celec.lm4)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Start:  AIC=-118.15
+## log(elec_cons_pc) ~ log(PIB2015_pc) + log(Pelec_euro2015) + IRC
+## 
+##                       Df Sum of Sq       RSS      AIC
+## <none>                             0.0007936 -118.150
+## - log(PIB2015_pc)      1 0.0004937 0.0012873 -113.862
+## - log(Pelec_euro2015)  1 0.0033985 0.0041921  -98.513
+## - IRC                  1 0.0152999 0.0160935  -81.026
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = log(elec_cons_pc) ~ log(PIB2015_pc) + log(Pelec_euro2015) + 
+##     IRC, data = celec_2009)
+## 
+## Coefficients:
+##         (Intercept)      log(PIB2015_pc)  log(Pelec_euro2015)  
+##            -17.5592              -0.3106               0.2158  
+##                 IRC  
+##              0.3678
+\end{verbatim}
+
+The Akaike criteria tells us that there's no variable that we can remove
+from the model without loosing too much information.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#un autre modele, mais que je n\textquotesingle{}exploite pas par la suite}
+\NormalTok{celec.lm5}\OtherTok{=}\FunctionTok{lm}\NormalTok{(elec\_cons\_pc}\SpecialCharTok{\textasciitilde{}}\NormalTok{ IRC }\SpecialCharTok{+}\NormalTok{ PIB2015\_pc }\SpecialCharTok{+}\NormalTok{ Population, }\AttributeTok{data =}\NormalTok{ celec\_2009)}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(celec.lm5)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{EconometrieLea2_files/figure-latex/unnamed-chunk-32-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(celec.lm5)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = elec_cons_pc ~ IRC + PIB2015_pc + Population, data = celec_2009)
+## 
+## Residuals:
+##        Min         1Q     Median         3Q        Max 
+## -3.819e-08 -9.283e-09 -5.038e-09  9.407e-09  3.534e-08 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) -1.922e-06  5.582e-07  -3.443 0.007355 ** 
+## IRC          8.854e-07  6.803e-08  13.015 3.85e-07 ***
+## PIB2015_pc  -2.662e-02  9.784e-03  -2.720 0.023590 *  
+## Population   6.890e-14  1.128e-14   6.109 0.000177 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 2.317e-08 on 9 degrees of freedom
+## Multiple R-squared:  0.9499, Adjusted R-squared:  0.9332 
+## F-statistic: 56.92 on 3 and 9 DF,  p-value: 3.561e-06
+\end{verbatim}
+
+\section{Vérification de la normalité des
+résidus}\label{vuxe9rification-de-la-normalituxe9-des-ruxe9sidus-1}
+
+\subsection{Histogramme des résidus}\label{histogramme-des-ruxe9sidus-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{hist}\NormalTok{(}\FunctionTok{residuals}\NormalTok{(celec.lm4), }\AttributeTok{main=}\StringTok{"Histogramme des résidus"}\NormalTok{, }\AttributeTok{xlab=}\StringTok{"Résidus"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{EconometrieLea2_files/figure-latex/unnamed-chunk-33-1.pdf}}
+Visually, there's a hint of non-normality, as a further increase can be
+seen on the right-hand side of the graph. However, the data still has a
+Gaussian shape, so we need to examine the normality of the residuals
+further. The Shapiro--Wilk test is known not to work well in samples
+with many identical values and Jarque-Bera is bad for small samples as
+ours.The best test we can use seems to be Anderson-Darling.
+
+\#\#Test d'Anderson-Darling
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ad.test}\NormalTok{(}\FunctionTok{residuals}\NormalTok{(celec.lm4))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Anderson-Darling normality test
+## 
+## data:  residuals(celec.lm4)
+## A = 0.26891, p-value = 0.6187
+\end{verbatim}
+
+The Anderson-Darling's test returns a p-value greater than 0.05 so we
+can consider that the residuals follows a gaussian distribution.
+
+\section{Vérification de
+l'hétéroscédasticité}\label{vuxe9rification-de-lhuxe9tuxe9roscuxe9dasticituxe9-1}
+
+To test for heteroscedasticity, we can choose between several tests.
+Since the Goldfeld-Quandt test is not very robust to specification
+errors and the White test is certainly more general and can detect a
+wider range of forms of heteroscedasticity, but cannot be used for small
+samples, we decide to use the Breusch-Pagan test. The latter is designed
+to detect only linear forms of heteroscedasticity, which could be our
+case.
+
+\#\#Test de Breusch-Pagan
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{bptest}\NormalTok{(celec.lm4)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  studentized Breusch-Pagan test
+## 
+## data:  celec.lm4
+## BP = 2.8577, df = 3, p-value = 0.4141
+\end{verbatim}
+
+Here the test returns a p-value greater than 0.05 so we don't reject the
+null hypothesis and we assume homoscedasticity.
+
+\section{Test d'autocorrélation}\label{test-dautocorruxe9lation-1}
+
+\#\#Test de Breusch-Godfrey
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{bgtest}\NormalTok{(celec.lm4)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Breusch-Godfrey test for serial correlation of order up to 1
+## 
+## data:  celec.lm4
+## LM test = 1.6596, df = 1, p-value = 0.1977
+\end{verbatim}
+
+\#\#Etude de la multicolinéarité
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{vif}\NormalTok{(celec.lm4)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     log(PIB2015_pc) log(Pelec_euro2015)                 IRC 
+##            2.046146            2.408974            1.259673
+\end{verbatim}
+
+Pas de multicolinéarité
+
+\#Diagnostic visuel
+
+\#\#Graphique des valeurs ajustées vs résidus
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(}\FunctionTok{fitted}\NormalTok{(celec.lm4), }\FunctionTok{residuals}\NormalTok{(celec.lm4), }\AttributeTok{main=}\StringTok{"Valeurs ajustées vs Résidus"}\NormalTok{, }\AttributeTok{xlab=}\StringTok{"Valeurs ajustées"}\NormalTok{, }\AttributeTok{ylab=}\StringTok{"Résidus"}\NormalTok{)}
+\FunctionTok{abline}\NormalTok{(}\AttributeTok{h=}\DecValTok{0}\NormalTok{, }\AttributeTok{col=}\StringTok{"red"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{EconometrieLea2_files/figure-latex/unnamed-chunk-38-1.pdf}}
+
+\#\#QQ-plot des résidus
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{qqnorm}\NormalTok{(}\FunctionTok{residuals}\NormalTok{(celec.lm4))}
+\FunctionTok{qqline}\NormalTok{(}\FunctionTok{residuals}\NormalTok{(celec.lm4), }\AttributeTok{col=}\StringTok{"red"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{EconometrieLea2_files/figure-latex/unnamed-chunk-39-1.pdf}}
+
+\end{document}

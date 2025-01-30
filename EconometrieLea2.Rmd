@@ -1,0 +1,356 @@
+---
+title: "Econometry new"
+output:
+  pdf_document: default
+  html_document: default
+date: "2025-01-25"
+---
+## Importation des données
+
+```{r}
+#importation des différentes librairies nécessaires pour la suite du projet
+options(repos = c(CRAN = "https://cloud.r-project.org"))
+install.packages(c("caret", "skedastic", "nortest", "olsrr"))
+library(ggplot2)
+library(cowplot)
+library(car)
+library(carData)
+library(caret)
+library(FactoMineR)
+library(readxl)
+library(dplyr)
+library(tidyr)
+library(lmtest) #pour Breusch-Pagan
+library(skedastic) #pour White
+library(nortest) #pour Anderson-Darling
+library(olsrr) #pour White
+```
+
+```{r}
+#ouverture des jeux de données de consommation d'électricité des ménages
+celec<-read_excel("celec_menages.xlsx", col_names = TRUE)
+```
+```{r}
+#nous regardons la structure des données de la table "celec"
+str(celec)
+```
+IPC : indice annuel des prix à la consommation
+PIB2020 : produit intérieur brut en euros de 2020
+Pelec : Prix de l'électricité des ménages (euro/MWh)
+Pop1 : population France métropolitaine
+DJU : Indice de rigueur du climat (MTES)
+Celec_menages : consommation électrice GWh observée
+
+#%=================================================%=
+## PREPARING SET FOR EXPLORATION AND REGRESSION ####
+#%=================================================%=
+
+## Renommer les colonnes pour une meilleure clarté
+
+## IRC = Indice de Rigueur Climatique.
+  
+```{r}
+ celec <- celec %>%
+  rename(
+        IRC = DJU,
+        Population = Pop1,
+        elec_cons = Celec_menages,
+        IPC = `IPC(base100=2015)`,
+    )
+```
+
+## Synthèse descriptive des données
+
+```{r}
+summary(celec)
+```
+
+#%===========================================
+## Going base 100 for all variables in 2015
+
+```{r}
+base_2015 <- celec %>% filter(Date == 2015)
+```
+
+```{r}
+celec <- celec %>%
+    mutate(
+        PIB2020_base100_2015 = PIB2020 / base_2015$PIB2020 * 100,
+        Pelec_base100_2015 = Pelec / base_2015$Pelec * 100,
+        Population_base100_2015 = Population / base_2015$Population * 100,
+        IRC_base100_2015 = IRC / base_2015$IRC * 100,
+        elec_cons_base100_2015 = elec_cons / base_2015$elec_cons * 100, 
+        IPC_base100_2015 = IPC  # L'IPC est déjà en base 100
+    )
+```
+## Tracer toutes les colonnes qui se terminent par base100_2015 en fonction de Date
+## Convertir les données en format long pour ggplot
+
+```{r}
+celec_long <- celec %>%
+    select(Date, ends_with("base100_2015")) %>%
+    pivot_longer(cols = -Date, names_to = "variable", values_to = "value") %>%
+    mutate(variable = gsub("_base100_2015", "", variable))
+```
+
+## Tracer les données
+
+```{r}
+ggplot(celec_long, aes(x = Date, y = value, color = variable)) +
+    geom_line(linewidth = 0.8) +
+    geom_point(size = 1) +
+    scale_color_manual(values = c("red", "blue", "green", "purple", "orange", "#00c3ff")) +
+    labs(title = "Évolution temporelle des variables (normalisées en base 100)",
+       x = "Date",
+       y = "Valeur (base 100 en 2015)",
+       color = "Variable") +
+    theme_minimal()
+```
+
+#%===========================================
+# Adding new variables for the regression
+
+# Le PIB est en euro constant 2020 mais l'inflation en base 2015 : on doit ajuster le PIB en 2015
+
+```{r}
+celec <- celec %>%
+    mutate(
+        elec_cons_pc = elec_cons / Population, # pc = per capita
+        PIB2015 = PIB2020 * (IPC[Date == 2015] / IPC[Date == 2020]), #en milliards d'euros 2015
+        PIB2015_pc = PIB2015 / Population, #in 2015 10^9 euros per capita, 
+        Pelec_euro2015 = Pelec * (IPC[Date == 2015] / IPC), # Prix de l'électricité en euro constant 2015
+    )
+```
+
+#%==========================================================================%=
+## PREMIERE REGRESSION GLOBALE SANS PRISE EN COMPTE DE LA RUPTURE EN 2009 ####
+#%==========================================================================%=
+
+# Régression
+```{r}
+celec.lm=lm(elec_cons~PIB2015 + Population + IRC + Pelec_euro2015 + IPC + Date, data = celec)
+par(mfrow=c(2,2))
+plot(celec.lm)
+summary(celec.lm)
+```
+Les variables PIB2015, Population et IPC ont des p-value supérieures à 5% donc nous les retirons.
+
+# Deuxième régression
+```{r}
+celec.lm2=lm(elec_cons~IRC + Pelec_euro2015 + Date, data = celec)
+par(mfrow=c(2,2))
+plot(celec.lm2)
+summary(celec.lm2)
+```
+
+# Vérification de la normalité des résidus
+
+## Histogramme des résidus
+
+```{r}
+hist(residuals(celec.lm2), main="Histogramme des résidus", xlab="Résidus")
+```
+## Test de Shapiro-Wilk
+
+```{r}
+shapiro.test(residuals(celec.lm2))
+```
+Normalité validée
+
+## Test d'Anderson-Darling
+```{r}
+ad.test(residuals(celec.lm2))
+```
+Normalité validée
+
+# Vérification de l'hétéroscédasticité 
+## Test de Breusch-Pagan
+```{r}
+bptest(celec.lm2)
+```
+Homoscédasticité validée
+
+## Test de White
+```{r}
+bptest(celec.lm2, ~ fitted(celec.lm2) + I(fitted(celec.lm2)))
+```
+
+# Test d'autocorrélation
+
+## Test de Breusch-Godfrey
+
+```{r}
+bgtest(celec.lm2)
+```
+Pas d'autocorrélation.
+
+# Etude de la multicolinéarité
+
+```{r}
+vif(celec.lm2)
+```
+
+VIF pas élevé (inférieur à 5) donc pas d'autocorrelation notable.
+
+```{r}
+vif(celec.lm)
+```
+Dans le premier modèle, les VIF étaient très élevées.
+
+-> Donc pas besoin de passer par du Lasso et de l'ACP.
+
+# Diagnostic visuel
+
+## Graphique des valeurs ajustées vs résidus
+
+```{r}
+plot(fitted(celec.lm2), residuals(celec.lm2), main="Valeurs ajustées vs Résidus", xlab="Valeurs ajustées", ylab="Résidus")
+abline(h=0, col="red")
+
+```
+
+Perfetto
+
+## QQ-plot des résidus
+
+```{r}
+qqnorm(residuals(celec.lm2))
+qqline(residuals(celec.lm2), col="red")
+
+```
+ça serpente un peu quand même.
+
+#%==============================================================%=
+## DEUXIEME MODELE AVEC PRISE EN COMPTE DE LA RUPTURE EN 2009 ####
+#%==============================================================%=
+
+```{r}
+celec.lm3=lm(log(elec_cons_pc)~log(PIB2015_pc) + log(Pelec_euro2015) + IRC , data = celec)
+par(mfrow=c(2,2))
+plot(celec.lm3)
+summary(celec.lm3)
+```
+The coefficients β1 and β2 are, respectively, the income elasticity of electricity consumption and the price elasticity of electricity consumption. These coefficients measure the percentage change in electricity consumption in relation, respectively, to a percentage change in income and a percentage change in prices. Here β1 is estimated 1.01 and β2 is estimated -0.03.
+Chow test could be not applicable if residuals are not independant. 
+
+test de Chow pas immédiatement applicable ? -> les résidus du modèle doivent être indépendants et ne pas montrer de tendance -> or les graphs sont un peu dégueux ?
+
+```{r}
+# Création de deux groupes pour application du test de Chow
+groupe1 <- subset(celec, Date<2009)
+groupe2 <- subset(celec, Date>=2009)
+```
+
+```{r}
+lm1_chow <- lm(log(elec_cons_pc) ~ log(PIB2015_pc) + log(Pelec_euro2015) + IRC, data = groupe1)
+lm2_chow <- lm(log(elec_cons_pc) ~ log(PIB2015_pc) + log(Pelec_euro2015) + IRC, data = groupe2)
+```
+
+```{r}
+#Ajout de l'indication groupe 1 et groupe 2 dans la table celec
+celec$group <- ifelse(celec$Date < 2009, "groupe1", "groupe2")
+```
+
+
+```{r}
+lm_global <- lm(log(elec_cons_pc) ~ log(PIB2015_pc) * group +
+                                  log(Pelec_euro2015) * group +
+                                  IRC * group,
+                data = celec)
+
+```
+
+```{r}
+# Test de Chow
+linearHypothesis(lm_global, 
+                 c("log(PIB2015_pc):groupgroupe2 = 0",
+                   "groupgroupe2:log(Pelec_euro2015) = 0",
+                   "groupgroupe2:IRC = 0"))
+
+```
+The Chow test returns a p-value lower than 0.05, so we can validate a break in 2009. This implies that we need to different models to fit with the data before and after 2009. Thus, our projection for 2030 have to be estimated using the model fitting data after 2009. 
+
+```{r}
+#Creation de la table qui ne contient que les données supérieures à 2009
+celec_2009 <- celec[celec$Date >= 2009, ]
+```
+
+# Modele de régression à partir de 2009
+
+```{r}
+celec.lm4=lm(log(elec_cons_pc)~log(PIB2015_pc) + log(Pelec_euro2015) + IRC, data = celec_2009)
+par(mfrow=c(2,2))
+plot(celec.lm4)
+summary(celec.lm4)
+```
+
+```{r}
+step(celec.lm4)
+```
+The Akaike criteria tells us that there's no variable that we can remove from the model without loosing too much information. 
+
+```{r}
+#un autre modele, mais que je n'exploite pas par la suite
+celec.lm5=lm(elec_cons_pc~ IRC + PIB2015_pc + Population, data = celec_2009)
+par(mfrow=c(2,2))
+plot(celec.lm5)
+summary(celec.lm5)
+```
+
+# Vérification de la normalité des résidus
+
+## Histogramme des résidus
+
+```{r}
+hist(residuals(celec.lm4), main="Histogramme des résidus", xlab="Résidus")
+```
+Visually, there's a hint of non-normality, as a further increase can be seen on the right-hand side of the graph. However, the data still has a Gaussian shape, so we need to examine the normality of the residuals further.
+The Shapiro–Wilk test is known not to work well in samples with many identical values and Jarque-Bera is bad for small samples as ours.The best test we can use seems to be Anderson-Darling.
+
+##Test d'Anderson-Darling
+```{r}
+ad.test(residuals(celec.lm4))
+```
+The Anderson-Darling's test returns a p-value greater than 0.05 so we can consider that the residuals follows a gaussian distribution. 
+
+# Vérification de l'hétéroscédasticité 
+
+To test for heteroscedasticity, we can choose between several tests. Since the Goldfeld-Quandt test is not very robust to specification errors and the White test is certainly more general and can detect a wider range of forms of heteroscedasticity, but cannot be used for small samples, we decide to use the Breusch-Pagan test. The latter is designed to detect only linear forms of heteroscedasticity, which could be our case.
+
+##Test de Breusch-Pagan
+```{r}
+bptest(celec.lm4)
+```
+Here the test returns a p-value greater than 0.05 so we don't reject the null hypothesis and we assume homoscedasticity.
+
+# Test d'autocorrélation
+
+##Test de Breusch-Godfrey
+
+```{r}
+bgtest(celec.lm4)
+```
+
+##Etude de la multicolinéarité
+
+```{r}
+vif(celec.lm4)
+```
+Pas de multicolinéarité
+
+#Diagnostic visuel
+
+##Graphique des valeurs ajustées vs résidus
+
+```{r}
+plot(fitted(celec.lm4), residuals(celec.lm4), main="Valeurs ajustées vs Résidus", xlab="Valeurs ajustées", ylab="Résidus")
+abline(h=0, col="red")
+```
+
+##QQ-plot des résidus
+
+```{r}
+qqnorm(residuals(celec.lm4))
+qqline(residuals(celec.lm4), col="red")
+
+```
