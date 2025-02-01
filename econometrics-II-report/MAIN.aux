@@ -32,7 +32,7 @@
 \@writefile{toc}{\contentsline {section}{\numberline {4}Methods}{4}{section.4}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.1}About the dataset}{4}{subsection.4.1}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Time variation in our data, expressed in base 100 (2015). In black the electricty consumption. In light blue and orange, respectively the GDP and the net disposable income, in euros 2020. In pink, the inflation through CPI, in green the population size. In red the climate index, and eventually in purple the electricity price.}}{4}{figure.1}\protected@file@percent }
-\newlabel{var}{{1}{4}{Time variation in our data, expressed in base 100 (2015). In black the electricty consumption. In light blue and orange, respectively the GDP and the net disposable income, in euros 2020. In pink, the inflation through CPI, in green the population size. In red the climate index, and eventually in purple the electricity price}{figure.1}{}}
+\newlabel{fig:var}{{1}{4}{Time variation in our data, expressed in base 100 (2015). In black the electricty consumption. In light blue and orange, respectively the GDP and the net disposable income, in euros 2020. In pink, the inflation through CPI, in green the population size. In red the climate index, and eventually in purple the electricity price}{figure.1}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces A correlation matrix of some data of interest. A cross indicate a p-value higher than 0.05 (no significant correlation).}}{4}{figure.2}\protected@file@percent }
 \newlabel{corr_mat}{{2}{4}{A correlation matrix of some data of interest. A cross indicate a p-value higher than 0.05 (no significant correlation)}{figure.2}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.2}OLS Regression: a kind reminder}{5}{subsection.4.2}\protected@file@percent }
@@ -42,7 +42,7 @@
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.1}Multicollinerarity}{5}{subsubsection.4.3.1}\protected@file@percent }
 \newlabel{eq:mean-cent-operator}{{4.3}{5}{Multicollinerarity}{equation.4.3}{}}
 \newlabel{eq:OLS-mean-cent}{{4.4}{5}{Multicollinerarity}{equation.4.4}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.2}Normality of residuals}{5}{subsubsection.4.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.2}Normality of residuals}{6}{subsubsection.4.3.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.3}Homoscedasticity}{6}{subsubsection.4.3.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.4}Autocorrelation}{6}{subsubsection.4.3.4}\protected@file@percent }
 \@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Autocorrelation Test Results}}{6}{table.1}\protected@file@percent }
@@ -58,7 +58,25 @@
 \citation{chow1960tests}
 \newlabel{eq:elast}{{4.5}{7}{Results}{equation.4.5}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Structural break}{7}{subsection.4.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}A change of strategy}{7}{subsection.4.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.1}Eliciting the break date}{7}{subsubsection.4.4.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Bai-Perron test for structural breaks, looking for the optimal number of breaks.}}{7}{table.4}\protected@file@percent }
+\newlabel{tab:supF_tests}{{4}{7}{Bai-Perron test for structural breaks, looking for the optimal number of breaks}{table.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Bai-Perron test for structural breaks, looking for two breaks in the mean-centered log of electricity price and net disposable income in constant currency.}}{8}{figure.3}\protected@file@percent }
+\newlabel{fig:bai-perron-break}{{3}{8}{Bai-Perron test for structural breaks, looking for two breaks in the mean-centered log of electricity price and net disposable income in constant currency}{figure.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Step-by-step Chow test results on the model \ref {eq:OLS-mean-cent} between 2006 and 2011. Each point above the dashed red line indicates a significant break. We retain as the break date the one with the highest F-statistic.}}{8}{figure.4}\protected@file@percent }
+\newlabel{fig:chow-break}{{4}{8}{Step-by-step Chow test results on the model \ref {eq:OLS-mean-cent} between 2006 and 2011. Each point above the dashed red line indicates a significant break. We retain as the break date the one with the highest F-statistic}{figure.4}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.2}Taking into account the structural break}{8}{subsubsection.4.4.2}\protected@file@percent }
+\newlabel{eq:break}{{4.6}{8}{Taking into account the structural break}{equation.4.6}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Regression analysis results from model \eqref  {eq:break}.}}{8}{table.5}\protected@file@percent }
+\newlabel{regression_break}{{5}{8}{Regression analysis results from model \eqref {eq:break}}{table.5}{}}
+\newlabel{eq:before-after}{{4.7}{9}{Taking into account the structural break}{equation.4.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Observed and predicted }}{9}{figure.5}\protected@file@percent }
+\newlabel{fig:regstructural}{{5}{9}{Observed and predicted}{figure.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}A change of strategy}{9}{subsection.4.5}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Regression analysis results from model \eqref  {eq:before-after}, before the structural break.}}{9}{table.6}\protected@file@percent }
+\newlabel{regression_before}{{6}{9}{Regression analysis results from model \eqref {eq:before-after}, before the structural break}{table.6}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Regression analysis results from model \eqref  {eq:before-after}, after the structural break.}}{9}{table.7}\protected@file@percent }
+\newlabel{regression_after}{{7}{9}{Regression analysis results from model \eqref {eq:before-after}, after the structural break}{table.7}{}}
 \citation{*}
 \bibstyle{unsrt}
 \bibdata{biblio.bib}
@@ -67,14 +85,14 @@
 \bibcite{bai1998estimating}{3}
 \bibcite{bai2003computation}{4}
 \bibcite{chow1960tests}{5}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Results}{8}{section.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {6}Limits}{8}{section.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {7}Matériels et méthodes}{8}{section.7}\protected@file@percent }
-\newlabel{Méthodes et Matériel}{{7}{8}{Matériels et méthodes}{section.7}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {8}Résultats et discussions}{8}{section.8}\protected@file@percent }
-\newlabel{results}{{8}{8}{Résultats et discussions}{section.8}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {9}À propos du prototype}{8}{section.9}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {10}Conclusion}{8}{section.10}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{Bibliographie}{8}{section.10}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {11}Appendix}{8}{section.11}\protected@file@percent }
-\gdef \@abspage@last{8}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Results}{10}{section.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}Limits}{10}{section.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7}Matériels et méthodes}{10}{section.7}\protected@file@percent }
+\newlabel{Méthodes et Matériel}{{7}{10}{Matériels et méthodes}{section.7}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Résultats et discussions}{10}{section.8}\protected@file@percent }
+\newlabel{results}{{8}{10}{Résultats et discussions}{section.8}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {9}À propos du prototype}{10}{section.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {10}Conclusion}{10}{section.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{Bibliographie}{10}{section.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {11}Appendix}{10}{section.11}\protected@file@percent }
+\gdef \@abspage@last{10}

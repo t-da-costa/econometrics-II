@@ -272,11 +272,13 @@ sink()
 # %=================================================%=
 
 celec <- celec %>%
-    mutate(Interaction_ln_price_Inc = ln_Inc_pc_MC * ln_price2015_MC)
+    mutate(
+        Interaction_ln_price_Inc = ln_Inc_pc_MC * ln_price2015_MC, 
+        ln_elec_cons_MC = log(elec_cons_pc) - mean(log(elec_cons_pc)))
 
 # Convert data to long format for ggplot
 interaction_long <- celec %>%
-    select(Date, ln_Inc_pc_MC, ln_price2015_MC, Interaction_ln_price_Inc) %>%
+    select(Date, ln_Inc_pc_MC, ln_price2015_MC, Interaction_ln_price_Inc, ln_elec_cons_MC) %>%
     pivot_longer(cols = -Date, names_to = "variable", values_to = "value")
 
 # Plot the interaction terms
@@ -362,4 +364,190 @@ for (i in years) {
     chow_test <- sctest(y ~ X, type = "Chow", point = i)
     chow_results <- rbind(chow_results, data.frame(
         Break_Year = celec$Date[i],
-        F_Statistic = chow_test$statisti
+        F_Statistic = chow_test$statistic,
+        P_Value = chow_test$p.value
+    ))
+}
+
+best_break <- chow_results[which.min(chow_results$P_Value), ]
+print(best_break)
+
+ggplot(chow_results, aes(x = Break_Year, y = F_Statistic)) +
+    geom_line() +
+    geom_point() +
+    geom_hline(yintercept = qf(0.95, df1 = 3, df2 = nrow(celec) - 6), linetype = "dashed", color = "red") +
+    labs(
+        title = "Chow Test for Structural Breaks (2006-2011)",
+        x = "Potential Break Year",
+        y = "F-Statistic"
+    ) +
+    theme_minimal()
+
+# Save the plot
+ggsave("econometrics-II-report/Images/chow_test_results.jpeg", width = 10, height = 6)
+
+
+# # Apply the CUSUM-square test
+# cusum_sq_test <- efp(celec.lm$residuals ~ 1, type = "Rec-CUSUM")
+
+# # Plot without x-axis labels
+# plot(cusum_sq_test, xaxt = "n")
+
+# # Manually set the x-axis labels to display years
+# axis(1, at = seq(0, 1, length.out = length(celec$Date)), labels = celec$Date)
+
+# %=================================================%=
+# REGRESSION ON A SUBSET ####
+# %=================================================%=
+
+# Create two dummies
+
+celec <- celec %>%
+    mutate(break_dummy = ifelse(Date > 2007, 1, 0),
+    crisis_dummy = ifelse(celec$Date %in% c(2008, 2020), 1, 0))
+
+# Create a subset of celec for data after 2007
+celec_before_2007 <- celec %>% filter(Date <= 2007)
+celec_after_2007 <- celec %>% filter(Date > 2007)
+
+## Does the break causes a shift in consumption?
+celecbreak.lm <- lm(log(elec_cons_pc) ~ ln_Inc_pc_MC*ln_price2015_MC + IRC + break_dummy, data = celec)
+plot(celecbreak.lm)
+summary(celecbreak.lm)
+stargazer(celecbreak.lm, type = "latex", out = "econometrics-II-report/Results/celecbreak_dummy_lm_results.tex")
+
+vif(celecbreak.lm)
+# t-test for zero mean
+t.test(residuals(celecbreak.lm), mu = 0)
+# Anderson-Darling test for normality of residuals
+ad.test(residuals(celecbreak.lm))
+# Breusch-Pagan test for heteroskedasticity
+bptest(celecbreak.lm)
+# Goldfeld-Quandt test for heteroskedasticity
+gqtest(celecbreak.lm)
+# Durbin-Watson test for autocorrelation
+dwtest(celecbreak.lm)
+# Ljung-Box test for autocorrelation
+Box.test(celecbreak.lm$residuals, lag = 10, type = "Ljung-Box")
+# Breusch-Godfrey test for autocorrelation
+bgtest(celecbreak.lm)
+
+
+# %=================================================%=
+#### What about subsets? ####
+
+# # Perform regression on the subset pre-2007
+# celec_before_2007.lm <- lm(log(elec_cons_pc) ~ (ln_Inc_pc_MC)*(ln_price2015_MC) + IRC, data = celec_before_2007)
+# par(mfrow = c(2, 2))
+# plot(celec_before_2007.lm)
+# summary(celec_before_2007.lm)
+
+# vif(celec_before_2007.lm)
+
+# # Perform regression on the subset post-2007 with interactions
+# celec_after_2007.lm <- lm(log(elec_cons_pc) ~ (ln_Inc_pc_MC)*(ln_price2015_MC) + IRC, data = celec_after_2007)
+# par(mfrow = c(2, 2))
+# plot(celec_after_2007.lm)
+# summary(celec_after_2007.lm)
+
+# # Check VIF
+# vif(celec_after_2007.lm)
+
+# # Perform regression on the subset post-2007 without interactions
+# celec_after_2007.lm <- lm(log(elec_cons_pc) ~ (ln_Inc_pc_MC) + (ln_price2015_MC) + IRC, data = celec_after_2007)
+# par(mfrow = c(2, 2))
+# plot(celec_after_2007.lm)
+# summary(celec_after_2007.lm)
+
+# vif(celec_after_2007.lm)
+
+# Use BIC criteria to select the best variables for the regression model
+BIC_before_2007 <- lm(log(elec_cons_pc) ~ ln_Inc_pc_MC*(ln_price2015_MC)*IRC, data = celec_before_2007)
+best_model_before <- step(BIC_before_2007, direction = "both", k = log(nrow(celec_before_2007)))
+
+# Removing ln_price2015_MC from the BIC selection because it was not statistically significant
+best_model_before <- lm(log(elec_cons_pc) ~ ln_Inc_pc_MC  +  
+                          IRC + ln_Inc_pc_MC:ln_price2015_MC, data = celec_before_2007)
+
+# Print the summary of the best model
+summary(best_model_before)
+
+# Plot diagnostics for the best model
+par(mfrow = c(2, 2))
+plot(best_model_before)
+
+vif(best_model_before)
+# t-test for zero mean
+t.test(residuals(best_model_before), mu = 0)
+# Anderson-Darling test for normality of residuals
+ad.test(residuals(best_model_before))
+# Breusch-Pagan test for heteroskedasticity
+bptest(best_model_before)
+# Goldfeld-Quandt test for heteroskedasticity
+gqtest(best_model_before)
+# Durbin-Watson test for autocorrelation
+dwtest(best_model_before)
+# Ljung-Box test for autocorrelation
+Box.test(best_model_before$residuals, lag = 10, type = "Ljung-Box")
+# Breusch-Godfrey test for autocorrelation
+bgtest(best_model_before)
+
+stargazer(best_model_before, type = "latex", out = "econometrics-II-report/Results/celecbefore_results.tex")
+
+
+BIC_after_2007 <- lm(log(elec_cons_pc) ~ ln_Inc_pc_MC*(ln_price2015_MC)*IRC*crisis_dummy, data = celec_after_2007)
+best_model_after <- step(BIC_after_2007, direction = "both", k = log(nrow(celec_after_2007)))
+
+# Print the summary of the best model
+summary(best_model_after)
+
+# Plot diagnostics for the best model
+par(mfrow = c(2, 2))
+plot(best_model_after)
+
+vif(best_model_after)
+# t-test for zero mean
+t.test(residuals(best_model_after), mu = 0)
+# Anderson-Darling test for normality of residuals
+ad.test(residuals(best_model_after))
+# Breusch-Pagan test for heteroskedasticity
+bptest(best_model_after)
+# Goldfeld-Quandt test for heteroskedasticity
+gqtest(best_model_after)
+# Durbin-Watson test for autocorrelation
+dwtest(best_model_after)
+# Ljung-Box test for autocorrelation
+Box.test(best_model_after$residuals, lag = 10, type = "Ljung-Box")
+# Breusch-Godfrey test for autocorrelation
+bgtest(best_model_after)
+
+stargazer(best_model_after, type = "latex", out = "econometrics-II-report/Results/celecafter_results.tex")
+
+# %=================================================%=
+# PLOT ELECTRICITY CONSUMPTION WITH REGRESSION LINE ####
+# %=================================================%=
+
+# Add predictions to dataset
+celec$predicted_lm <- predict(celecbreak.lm, newdata = celec)
+
+predicted_best_before <- data.frame(Date = celec_before_2007$Date, predicted_best_before = predict(best_model_before, newdata = celec_before_2007))
+celec <- merge(celec, predicted_best_before, by = "Date", all.x = TRUE)
+
+predicted_best_after <- data.frame(Date = celec_after_2007$Date, predicted_best_after = predict(best_model_after, newdata = celec_after_2007))
+celec <- merge(celec, predicted_best_after, by = "Date", all.x = TRUE)
+
+ggplot(celec, aes(x = Date, y = log(elec_cons_pc))) +
+    geom_point(color = "black", size = 3) +  # Scatter points
+    geom_line(aes(y = predicted_lm), color = "red", size = 1.5) +  # Custom regression line
+    geom_line(aes(y = predicted_best_before), color = "#0033ff", size = 1) +  # Best model before 2007
+    geom_line(aes(y = predicted_best_after), color = "purple", size = 1) +  # Best model after 2007
+    labs(
+        title = "Electricity Consumption Over Time with Regression Lines",
+        x = "Year",
+        y = "Log of Electricity Consumption per Capita"
+    ) +
+    theme_minimal() +
+    scale_color_manual(values = c("red", "#0033ff", "purple"), labels = c("Model with dummy", "Model Before 2007", "Model After 2007")) +
+    theme(legend.position = "right")  # Ensure legend appears on the right side
+# Save the plot
+ggsave("econometrics-II-report/Images/electricity_consumption_regression.jpeg", width = 10, height = 6)
