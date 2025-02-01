@@ -247,46 +247,4 @@ First, by computing the sequential $\sup F$ tests of $l$ versus $l+1$ for $l \in
 
 Therefore, Bai-Perron Test is particularly useful as it can found multiple unkown breaks while handling potential heteroskedasticity and serial correlation.
 
-On the contrary, the Chow test \cite{chow1960tests} is used to test whether a structural break occurs at a specific, pre-determined date, assuming OLS properties. To perform a Chow test, we need to split the sample at the known break date into two subsamples. Then, we estimate the regression separately for both subsamples and for the entire dataset (without a break). To test whether the coefficients before and after the break are significantly different, we use the following F-statistics:
-$$F = \frac{(SSR_r - (SSR_1 + SSR_2)) / k}{(SSR_1 + SSR_2) / (n_1 + n_2 - 2k)}$$
-
-where $SSR_r$ is Sum of squared residuals for the full model, $SSR_1, SSR_2$ the one for the "before" and "after" models, $k$ the number of parameters in the model and $n_1, n_2$ the number of observations in each segment. \\
-
-Justify two breaks. 
-Add graphs. 
-Talk about regression on the last subset, the lack of significance because of the too small sample size. 
-
-Then use dummies to do a regression and capture the breaks (add one for COVID). Then forecasting.
-
-\subsection{A change of strategy}
-Lags? Why would the model be better with lags: does past prices or past income affects current consumption? \\
-
-Why would the model be better with autoregression: does previous consumption influence current consumption? \\
-
-First: Stationarity: Check whether your variables are stationary using Augmented Dickey-Fuller (ADF) tests. If they are not, you should difference them. \\
-
-3. Consider Economic Cycles and Policy Shocks
-    \begin{itemize}
-        \item Economic activity affects electricity demand non-linearly. Add:
-        \begin{itemize}
-            \item A squared GDP term $(\ln{\frac{{PIB}}{pop}}^2)$ to check for diminishing returns.
-            \item A crisis dummy for 2008-2009 (financial crisis) and 2020 (COVID-19).
-        \end{itemize}
-        \item The IRC coefficient is positive and significant, meaning harsher winters increase electricity demand.
-        \item Use interaction effects:
-        \begin{itemize}
-            \item $\text{IRC} \times \ln{\frac{PIB}{pop}}$ to check if income affects sensitivity to climate.
-            \item Do the same with income and sensitivity to price.
-        \end{itemize}
-    \end{itemize}
-
-
-(to check if income affects sensitivity to climate). Do the same with income and sensitivity to price. \\
-
-
-\section{Results}
-
-\section{Limits}
-Disaggregate income by quintile to highlight the impact of income inequality on electricity consumption. \\
-
-Should the electricity price be considered as an endogenous variable from the moment energy markets were liberalized? When prices are no longer set by public authorities, its variation could indeed be explained by the demand for electricity: the use of instrumental variables would then be necessary to avoid endogeneity bias.
+On the contrary, the Chow test \cite{chow1960tests} is used to test whether a structural break occurs at a specific, pre-determined date, assuming OLS properties. To perform a Chow test, we need to split the sample at the known break date into two subsamples. Then, we estimate the regression separately for both subsamples and for the entire dataset (without a break). To test whether the c
