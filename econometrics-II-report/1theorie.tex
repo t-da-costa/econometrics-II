@@ -1,12 +1,12 @@
-\section{Note échange}
-\label{theorie}
-Changememnt moyen prod: renouvelable increase entraîne gaz et charbon increase, qui évoluent avec le prix du pétrole. \\
+% \section{Note échange}
+% \label{theorie}
+% Changememnt moyen prod: renouvelable increase entraîne gaz et charbon increase, qui évoluent avec le prix du pétrole. \\
 
-Donnée mensuelle : pas accessible. 
+% Donnée mensuelle : pas accessible. 
 
-Co-integration: prendre des valeurs critiques. Helmut Luckte Paul. Bootstrap. 
+% Co-integration: prendre des valeurs critiques. Helmut Luckte Paul. Bootstrap. 
 
-Pesaran: optimal prediction with weighting on covid data.
+% Pesaran: optimal prediction with weighting on covid data.
  
 
 \newpage
@@ -14,9 +14,7 @@ Pesaran: optimal prediction with weighting on covid data.
 \section{Introduction}
 As France aim to achieve carbon neutrality by 2050\footnote{see \href{https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000041814459}{Légifrance}.}, it is of great matter to understand the determinants of past electricity consumption in order to predict future trends and build prospective scenarios that will inform energy policies. Despite the many reason that could explain the evolution of electricity consumption (structural changes in production and consumption, especially with regard to the energetic transition, AI consumption \cite{de2023growing}, etc.), we will keep the model simple and focus on the main determinants of electricity consumption: income, price and annual climate variations. The provided forecast therefore could be seen as a potential baseline scenario, built only from what have existed, completely blind to any future changes (or crisis) in the economy.
 
-\section{Methods}
-
-\subsection{About the dataset}
+\section{About the dataset}
 
 The given dataset is composed of 6 annual time series over electricity consumption, GDP, population, inflation (through Consumer Price Index), electricity price, and a climate index. The data is available from 1990 to 2021, therefore providing 32 observations. 
 
@@ -32,7 +30,7 @@ To our available data we add the real net disposable income of households and No
     \label{fig:var}
   \end{figure}
 
-From figure \ref{fig:var}, we realize how close the GDP and the net disposable income are, only clearly diverging in trend in 2008 and 2020, which we can identify as the 2008 financial crisis and the Covid-19 crisis. Let us note that from 2008, the growth rate of electricity price becomes greather than inflation.
+From figure \ref{fig:var}, we realize how close the GDP and the net disposable income are, only clearly diverging in trend in 2008 and 2020, which we can identify as the 2008 financial crisis and the Covid-19 crisis. Let us note that from 2008, the growth rate of electricity price becomes greater than inflation.
 
 It seems of great matter to take into account the climate variable into our regression model, considering how electricity consumption peaks in cold winters. Eventually, we guess a correlation between the trend decline in the growth rate of electricity consumption and the burst in the price of electricity since 2009. It is likely that this sharp increase is a consequence of the 2008 energy crisis (which might be explained as the interaction of a strong positive demand shock and the ongoing financial crisis, maybe combined with the conventional oil peak that occurred around 2005-2008 \cite{delannoy2021peak}). Some market effect could also be considered, as competitive electricity markets are at play in the UE since 2007, and the treaty of Lisbon entered into force in 2009.
 
@@ -47,7 +45,7 @@ The figure \ref{corr_mat} informs us of the correlation between some variable of
 
 Given our dataset, we'll tend to build simple, economically interpretable models rather than aiming for the best predictions with more complex models: we'll prioritize the comprehensibility of mechanisms over their precision.
 
-\subsection{OLS Regression: a kind reminder}
+\section{OLS Regression: a kind reminder}
 For $n$ observations and $k$ variables, we use the following linear regression model:
 \begin{align*}
     \boldsymbol{Y} & = \boldsymbol{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon} \\
@@ -81,7 +79,7 @@ The $R^2$ coefficient is used to evaluate the goodness of fit of the model. It m
 
 Confidence interval for $\beta_j \in \{\beta_1, \beta_2, \ldots, \beta_k\}$ is given by a Student's t-distribution with $n - k - 1$ degrees of freedom.
 
-\subsection{First models}
+\section{First models}
 The regression equation \eqref{eq:reg} is a model of electricity consumption seeking to explain the logarithm of per capita electricity consumption by the logarithm of income per capita in constant currency and the logarithm of the price of electricity in constant currency. 
 
 \begin{equation} \label{eq:reg}
@@ -99,7 +97,7 @@ The table \ref{regression_full_pc} could have shown predictable results, as the 
 \end{align}
 Let us see if the OLS assumptions hold. 
 
-\subsubsection{Multicollinerarity}
+\subsection{Multicollinerarity}
 The Variance Inflation Factor (VIF) of all variables but IRF was over $2000$, indicating huge multicollinearity. Because of the few variables and the small sample size we have, variable selection and regularization methods like LASSO or Elastic Net would not make any sense. In order to keep the interaction, we apply mean-centering to our variables of interests.
 \begin{equation} \label{eq:mean-cent-operator}
     \begin{cases}
@@ -115,13 +113,13 @@ The regression therefore becomes:
 \end{align}
 Using model \eqref{eq:OLS-mean-cent}, we don't face multicollinearity anymore: our VIF values for all variables stands between $1$ and $3$. The following tests are performed on this model.
 
-\subsubsection{Normality of residuals}
+\subsection{Normality of residuals}
 It is known that the Kolmogorov-Smirnov test is less powerful for testing normality than the Shapiro-Wilk test or Anderson-Darling test. Because the Shapiro-Wilk does not work well with many identical values and the Jarque-Bera test is not efficient for small samples, we choose the Anderson-Darling test to see whether the error terms follow a normal distribution. The test provides a p-value of $0.2989$, so we do not reject the null-hypothesis that the residuals are normally distributed. Also, we performed a one sample t-test on the residuals to control for the null hypothesis that the mean of the residuals is zero, which is true.
 
-\subsubsection{Homoscedasticity}
+\subsection{Homoscedasticity}
 The White test can detect a wide range of forms of heteroskedasticity, but tends to falsely detect heteroscedasticity in small samples. The {Breusch-Pagan} test is designed to detect only linear forms of heteroskedasticity, and even though the Goldfeld–Quandt test is not very robust to specification errors, it performs better for small samples. Both Breusch-Pagan and Goldfeld–Quandt tests give a p-value over $0.7$, so we can admit that the residuals are homoscedastic.
 
-\subsubsection{Autocorrelation}
+\subsection{Autocorrelation}
 Three tests can be used: the Durbin-Watson test is valid for nonstochastic regressors and allows to test the possibility of a first-order autoregressive model (e.g. AR(1)) for the regression errors. The Ljung-Box test, which requires the assumption of strict exogeneity, controls for higher order autocorrelation. 
 The Breusch–Godfrey test is statistically more powerful than Durbin's h statistic and more general than the {Ljung-Box} test. It checks for serial correlation and requires the assumptions of stronger forms of predeterminedness and conditional homoscedasticity.
 
@@ -142,7 +140,7 @@ Performing the tests (see table \ref{autocorrelation_tests}) reveals that the mo
     \end{tabular}
 \end{table}
 
-\subsubsection{Results}
+\subsection{Results}
 The model \eqref{eq:OLS-mean-cent} passed all the tests: it is well specified and can be interpreted. The table \ref{regression_good_linear} shows the results of the regression. The $R^2$ and adjusted $R^2$ are around 0.96, meaning that the model explains most of the variance in the dependent variable. The F-statistic is high with $p-value < 2.2e-16$, meaning that the model is statistically significant. 
 
 \begin{table}[!htbp] \centering 
@@ -233,9 +231,9 @@ Thus, classic microeconometric results are found as there is a negative price el
 
 The interaction term is positive, meaning that the price elasticity of electricity consumption increases with income. If income increases, the price effect becomes less negative: this could be explained by the fact that after a certain level of income, households are less sensitive to price changes. On the other way around, if electricity prices rise, income has a stronger positive effect on consumption.
 
-\subsection{Structural break}
-\subsubsection{Eliciting the break date}
-We previously mentioned how 2008 seemed to be a turning point in the electricity price trend and how it could have affected the electricity consumption trend. Let us use statistical techniques to detect whether or not this break matter. 
+\section{Structural break}
+\subsection{Eliciting the break date}
+We previously mentioned how 2008 seemed to be a turning point in the electricity price trend and how it could have affected the electricity consumption trend. Let us use statistical techniques to detect whether or not this break matters. 
 
 Bai and Perron (1998, 2003) provided a theoretical framework and computational algorithms to estimate and test for multiple structural changes at unknown dates in linear regression models, where the regressors are non-trending or regime-wise stationary \cite{bai1998estimating, bai2003computation}. 
 
@@ -254,7 +252,7 @@ $$F = \frac{(SSR_r - (SSR_1 + SSR_2)) / k}{(SSR_1 + SSR_2) / (n_1 + n_2 - 2k)}$$
 
 where $SSR_r$ is Sum of squared residuals for the full model, $SSR_1, SSR_2$ the one for the "before" and "after" models, $k$ the number of parameters in the model and $n_1, n_2$ the number of observations in each segment. 
 
-The Bai-Perron test indicates that there are two breaks in the data (see table \ref{tab:supF_tests}) and finds them in 1999 and 2007 (see figure \ref{fig:bai-perron-break}). To substantiate this result, we perform a step-by-step Chow test between 2006 and 2011 to determine the most likely break date. Figure \ref{fig:chow-break} also suggests a break date in 2007, which is consistent with the Bai-Perron test.
+The Bai-Perron test indicates that there are two breaks in the data (see table \ref{tab:supF_tests}) and finds them in 1999 and 2007 (see figure \ref{fig:bai-perron-break}). To substantiate this result, we perform a step-by-step Chow test between 2006 and 2011 to determine the most likely break date. Figure \ref{fig:chow-break} also suggests a break date in 2007, which is consistent with the Bai-Perron test. It is clear that the latest break date is related with the oil peak and the financial crisis of 2008. The first break date suggested by Bai-Perron is less obvious but might be related to the 1999 storm that hit France and disrupted 8\% of the electricity grid system\footnote{See \href{https://www.osti.gov/etdeweb/servlets/purl/20222814}{RTE}.}. On the latter, we will focus on 2007 as the year in which structural change occurred.
 
 \begin{table}[!htbp] 
     \centering
@@ -293,8 +291,8 @@ The Bai-Perron test indicates that there are two breaks in the data (see table \
 
 One should note that the COVID-19 crisis in 2020 is not detected, because of the lack of data coming after this date (our dataset ends in 2021). However, using net disposable income instead of GDP also seems to avoid the effect of the COVID-19 crisis, as no break appears on figure \ref{fig:var}. Furthermore, there are no evidence that electricity prices have been affected by the COVID-19 crisis, the recent spike in prices being more likely due to the war in Ukraine and the economic recovery.
 
-\subsubsection{Taking into account the structural break}
-Perfoming a regression on the last subset of date ($> 2007$) using the model \eqref{eq:OLS-mean-cent} elicits strong multicollinearity between the price and the interaction term. Because our independent variables are already mean-centered and the sample size is small and we have a low degree of freedom, regularization methods (\textit{e.g.} Ridge) would not be efficient. 
+\subsection{Taking into account the structural break}
+Perfoming a regression on the last subset of date ($> 2007$) using the model \eqref{eq:OLS-mean-cent} elicits strong multicollinearity between the price and the interaction term. Because our independent variables are already mean-centered and the sample size is small and we have a low degree of freedom, regularization methods (\textit{e.g.} Ridge) would not be efficient.
 
 To explore how the break affects the model, we introduce a dummy variable that takes the value $1$ after the break date and $0$ before. The model \eqref{eq:break} is then estimated using OLS. The results are shown in table \ref{regression_break}: the dummy is significant, \textit{i.e.} the structural break has an impact on the electricity consumption. 
 
@@ -350,7 +348,7 @@ To explore how the break affects the model, we introduce a dummy variable that t
   
 Knowing the existence of a structural break, we are looking for two models, pre-2007 and post-2007, that can elicit the reason of the change in eletricity consumption (prices, income, climate, crisis, etc.). Because using model \eqref{eq:OLS-mean-cent} on the two subsets reveals high multicollinearity, we explore what would be the best variables to include in the model with the help of the Bayesian Information Criterion (BIC) — a criterion that values the goodness of fit of a model while penalizing the number of parameters, maintaining the model's simplicity.
 
-Equations \eqref{eq:before-after} show the two models we retained, with $\text{Crisis}_i$ being a dummy variable for the financial crisis and the COVID-19 crisis (${Crisis}_i = 1$ for $i~=~\{2008, 2020\}, 0$~otherwise). The results are displayed in tables \ref{regression_before} and \ref{regression_after}, with the OLS assumptions (no multicollinearity and the error terms are $\varepsilon_i \sim WN(0, \sigma^2)$, {with} $\varepsilon_i \overset{iid}{\sim} \mathcal{N}(0, \sigma^2)$) being verified.
+Equations \eqref{eq:before-after} show the two models we retained, with $\text{Crisis}_i$ being a dummy variable for the French 1999 storm, the financial crisis and the COVID-19 crisis (${Crisis}_i = 1$ for $i~=~\{1999, 2008, 2020\}, 0$~otherwise). The results are displayed in tables \ref{regression_before} and \ref{regression_after}, with the OLS assumptions (no multicollinearity and the error terms are $\varepsilon_i \sim WN(0, \sigma^2)$, {with} $\varepsilon_i \overset{iid}{\sim} \mathcal{N}(0, \sigma^2)$) being verified.
 \begin{align} \label{eq:before-after}
     \begin{cases}
         \forall i \leq 2007 & y_i = \alpha + \beta_1 \left(\text{ln-Inc-pc}_i^{(MC)}\right) + \beta_3 IRC_i + \\ & \beta_4 \left(\text{ln-Inc-pc}_i^{(MC)} \times \text{ln-price2015}_i^{(MC)}\right) + \varepsilon_i \\
@@ -358,7 +356,7 @@ Equations \eqref{eq:before-after} show the two models we retained, with $\text{C
         \forall i > 2007 & y_i = \alpha + \beta_2 \left(\text{ln-price2015}_i^{(MC)}\right) + \beta_3 IRC_i + \\ & \beta_5 \text{Crisis}_i + \varepsilon_i
     \end{cases} 
 \end{align}
-The two tables highlight a clear change in regimes, the model before the break being more influenced by an income effect (the price elasticity derived from equation \eqref{eq:elast} is slightly negative and denote an inelastic demand) while the model after the break is more influenced by the climate fluctuations. An unusual result is the positive sign of $\beta_2$ in the second model. It interestingly raises the question of reverse causality, as high consumption could drive prices up, for instance in cases of supply constraints (\textit{e.g.} in 2012 or in 2017\footnote{see \href{http://publications.elia.be/upload/UG_upload/5SQMH9Z4FF.pdf}{RTE} and \href{https://www.nucnet.org/news/as-france-faces-winter-supply-constraints-iea-says-renewables-cannot-replace-nuclear}{IEA}.}), whereas there is an increasing number of electronic devices and more heating during winter. Still, electricity remains a necessity good and electricity costs are (partially) regulated in France, which might reduce households' sensitivity to price changes such that an increase in price does not lead to a decrease in demand.
+The two tables highlight a clear change in regimes, the model before the break being more influenced by an income effect (the price elasticity derived from equation \eqref{eq:elast} is slightly negative and denote an inelastic demand) while the model after the break is more influenced by the climate fluctuations. An unusual result is the positive sign of $\beta_2$ in the second model. It interestingly raises the question of reverse causality, as high consumption could drive prices up, for instance in cases of supply constraints (\textit{e.g.} in 2012 or in 2017\footnote{see \href{http://publications.elia.be/upload/UG_upload/5SQMH9Z4FF.pdf}{RTE} and \href{https://www.nucnet.org/news/as-france-faces-winter-supply-constraints-iea-says-renewables-cannot-replace-nuclear}{IEA}.}), whereas there is an increasing number of electronic devices and more heating during winter. Also, during a crisis, subsidies can be distributed to face high electricity costs, which might reduce households' sensitivity to price changes such that an increase in price does not lead to a decrease in demand.
 
 \begin{table}[!htbp] \centering 
     \caption{Regression analysis results from model \eqref{eq:before-after}, before the structural break.} 
@@ -428,45 +426,36 @@ The two tables highlight a clear change in regimes, the model before the break b
   \end{tabular} 
   \end{table} 
   
-  OLS regression of models \eqref{eq:break} and \eqref{eq:before-after} are graphically displayed figure \ref{fig:regstructural}. 
+  OLS regression of models \eqref{eq:break} and \eqref{eq:before-after} are graphically displayed figure \ref{fig:regstructural}. One can get how the two submodels fit slightly better the datapoints. Still, the difference between models \eqref{eq:break} and \eqref{eq:before-after} is fairly small.
 
   \begin{figure}[h]
     \centering
       \includegraphics[width=0.5\textwidth]{Images/electricity_consumption_regression.jpeg}
-      \caption{Observed and predicted logarithm of electricity consumption per capita.}
+      \caption{Observed and predicted logarithm of electricity consumption per capita. In green and blue are the predictions of the models \eqref{eq:before-after} (respectively before and after the break) and in red the predictions of the model \eqref{eq:break}.}
     \label{fig:regstructural}
   \end{figure}
 
-\subsection{A change of strategy}
-Lags? Why would the model be better with lags: does past prices or past income affects current consumption? 
+\section{Forecasting to 2030}
+Consistently with what we built, we will forecast the electricity consumption based on econometric relationships, especially on the model \eqref{eq:before-after}, considering values after 2007. Because we restrained ourselves with the methods taught in class, the electricity consumption forecast is based on very simple relationships and relies on the OLS coefficient estimated table \ref{regression_after}. Bootstrapping has been used in order to compensate for the low sample size. Nonetheless, it is clearly not enough to provide a satisfying forecast, as we can see figure \ref{fig:forecast}. Especially, the climate fluctuations are absolutely not captured by the linear model as they elicit explicit non-linearities.
 
-lagged effect (consumers take time to adjust to price changes?).\\
+\begin{figure}[h]
+    \centering
+      \includegraphics[width=0.5\textwidth]{Images/bootstrap_forecast_after.jpeg}
+      \caption{Electricity consumption forecast from 2022 to 2030.}
+    \label{fig:forecast}
+  \end{figure}
 
-Why would the model be better with autoregression: does previous consumption influence current consumption? \\
+\section{Discussion}
+A more rigorous approach would have led us to at least use ARIMA models: we could have on one hand forecast the explanatory variables before using our model \eqref{eq:before-after} and on the other hand forecast the electricity consumption directly.
 
-First: Stationarity: Check whether your variables are stationary using Augmented Dickey-Fuller (ADF) tests. If they are not, you should difference them. \\
+We would first have had to assess the weak exogeneity of the explanatory variables (the fact that their future values are not influenced by the dependent variable), which seems obvious for income, population, climate variations or inflation, that are not caused by eletricity consumption. For electricity price, we could have argued that electricity demand affects short-term pricing, but that long-term electricity price trends are mainly set by regulatory decisions and market forces. A Granger-Causality test actually confirms these assumptions. After checking stationarity of our univariate time-series (with a preference for the Elliott-Rothenberg-Stock (ERS), as it performs better for small samples), we would have find the integration order, the autoregressive order and the moving average order of the ARIMA model (with partial autocorrelation and autocorrelation functions). We could have defined a "seasonal" ARIMA model (SARIMA) for the climate index if needed. 
 
-3. Consider Economic Cycles and Policy Shocks
-    \begin{itemize}
-        \item Economic activity affects electricity demand non-linearly. Add:
-        \begin{itemize}
-            \item A squared GDP term $(\ln{\frac{{PIB}}{pop}}^2)$ to check for diminishing returns.
-        \end{itemize}
-        \item The IRC coefficient is positive and significant, meaning harsher winters increase electricity demand.
-        \item Use interaction effects:
-        \begin{itemize}
-            \item $\text{IRC} \times \ln{\frac{PIB}{pop}}$ to check if income affects sensitivity to climate.
-            \item Do the same with income and sensitivity to price.
-        \end{itemize}
-    \end{itemize}
+Nonetheless, all of this would have led to interpretation issues: why would we introduce lagged effect: do consumers take time to adjust to price changes? Does past prices or past income affect current consumption? About autoregression, does previous consumption influence current consumption? Our goal indeed was not to overfit the data to be as precise as possible but rather to elicit key microeconomic relationships that could explain the electricity consumption. The price effect and the income effect are well captured by the model, and the structural break is nicely detected as well.
 
+Because no clear pattern was found, the use of a Markov-Switching process would not have been relevant. However, some non-linear terms could probably have been introduced in the model, especially to capture the effect of climate fluctuations. 
 
-(to check if income affects sensitivity to climate). Do the same with income and sensitivity to price. \\
+More interestingly, the use of a Vector Autoregression (VAR) model could have been welcomed to capture the interdependencies between the variables. It would have allowed us to forecast the electricity consumption and the electricity price simultaneously, taking into account the feedback effects between the two variables. Using a structural VAR would even have gave us the possibility to shock a variable (\textit{e.g.} as a simulation for a future crisis, or a policy implementation) and obtain an Impulse Response Function from the variables. We would however have need much more granular data, and a clear identification of the variables ordering to design the Cholesky decomposition.
 
+Eventually, we mentioned the endogeneity issue: should the electricity price be considered as an endogenous variable from the moment energy markets were liberalized? When prices are no longer set by public authorities, their variation could indeed be explained by the demand for electricity: the use of instrumental variables would then have been necessary to avoid endogeneity bias. Dealing with COVID outliers also remains a challenge to be solved.
 
-\section{Results}
-
-\section{Limits}
-Disaggregate income by quintile to highlight the impact of income inequality on electricity consumption. \\
-
-Should the electricity price be considered as an endogenous variable from the moment energy markets were liberalized? When prices are no longer set by public authorities, its variation could indeed be explained by the demand for electricity: the use of instrumental variables would then be necessary to avoid endogeneity bias.
+\newpage

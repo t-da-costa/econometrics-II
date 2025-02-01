@@ -14,6 +14,8 @@
 # install.packages("mbreaks")
 # install.packages("strucchange")
 # install.packages("stargazer")
+# install.packages(c("forecast", "tseries"))
+# install.packages("urca")
 library(readxl)
 library(dplyr)
 library(tidyr)
@@ -36,6 +38,9 @@ library(strucchange) # for Chow test
 library(stargazer)
 library(xtable)
 
+library(forecast)
+library(tseries)
+library(urca) # For ERS and KPSS tests
 
 # %============================%=
 # DATA LOADING ####
@@ -404,7 +409,7 @@ ggsave("econometrics-II-report/Images/chow_test_results.jpeg", width = 10, heigh
 
 celec <- celec %>%
     mutate(break_dummy = ifelse(Date > 2007, 1, 0),
-    crisis_dummy = ifelse(celec$Date %in% c(2008, 2020), 1, 0))
+    crisis_dummy = ifelse(celec$Date %in% c(2001, 2008, 2020), 1, 0))
 
 # Create a subset of celec for data after 2007
 celec_before_2007 <- celec %>% filter(Date <= 2007)
@@ -462,7 +467,7 @@ bgtest(celecbreak.lm)
 # vif(celec_after_2007.lm)
 
 # Use BIC criteria to select the best variables for the regression model
-BIC_before_2007 <- lm(log(elec_cons_pc) ~ ln_Inc_pc_MC*(ln_price2015_MC)*IRC, data = celec_before_2007)
+BIC_before_2007 <- lm(log(elec_cons_pc) ~ ln_Inc_pc_MC*(ln_price2015_MC)*IRC*crisis_dummy, data = celec_before_2007)
 best_model_before <- step(BIC_before_2007, direction = "both", k = log(nrow(celec_before_2007)))
 
 # Removing ln_price2015_MC from the BIC selection because it was not statistically significant
@@ -539,15 +544,282 @@ celec <- merge(celec, predicted_best_after, by = "Date", all.x = TRUE)
 ggplot(celec, aes(x = Date, y = log(elec_cons_pc))) +
     geom_point(color = "black", size = 3) +  # Scatter points
     geom_line(aes(y = predicted_lm), color = "red", size = 1.5) +  # Custom regression line
-    geom_line(aes(y = predicted_best_before), color = "#0033ff", size = 1) +  # Best model before 2007
-    geom_line(aes(y = predicted_best_after), color = "purple", size = 1) +  # Best model after 2007
+    geom_line(aes(y = predicted_best_before), color = "green", size = 1) +  # Best model before 2007
+    geom_line(aes(y = predicted_best_after), color = "#228eed", size = 1) +  # Best model after 2007
     labs(
         title = "Electricity Consumption Over Time with Regression Lines",
         x = "Year",
         y = "Log of Electricity Consumption per Capita"
     ) +
     theme_minimal() +
-    scale_color_manual(values = c("red", "#0033ff", "purple"), labels = c("Model with dummy", "Model Before 2007", "Model After 2007")) +
+    scale_color_manual(values = c("red", "green", "#228eed"), labels = c("Model with dummy", "Model Before 2007", "Model After 2007")) +
     theme(legend.position = "right")  # Ensure legend appears on the right side
 # Save the plot
-ggsave("econometrics-II-report/Images/electricity_consumption_regression.jpeg", width = 10, height = 6)
+ggsave("econometrics-II-report/Images/electricity_consumption_regression.jpeg", width = 10, height = 10)
+
+
+# # %=================================================%=
+# # WHAT IS BELOW IS UNFINISHED AND BOTCHED
+# # %=================================================%=
+
+# # %=================================================%=
+# # OLS FORECAST with bootstrap FULL ####
+# # %=================================================%=
+# # Extract regression residuals
+# residuals_full_boot <- residuals(celecbreak.lm)
+
+# # Generate projections for 2022-2030 using simple trends
+# future_years <- data.frame(Date = seq(max(celec$Date) + 1, 2030, by = 1))
+# future_values <- future_years %>%
+#     mutate(
+#         # netInc2020 = predict(lm(netInc2020 ~ Date, data = celec), newdata = future_years),
+#         # Pelec = predict(lm(Pelec ~ Date, data = celec), newdata = future_years),
+#         # IPC = predict(lm(IPC ~ Date, data = celec), newdata = future_years),
+#         # Population = predict(lm(Population ~ Date, data = celec), newdata = future_years),
+#         # IRC = predict(lm(IRC ~ Date, data = celec), newdata = future_years), 
+#         # break_dummy = ifelse(Date > 2007, 1, 0),
+#         break_dummy = ifelse(Date > 2007, 1, 0),
+#         crisis_dummy = ifelse(Date %in% c(2001, 2008, 2020), 1, 0),
+#         netInc2020 = head(forecast(auto.arima(celec$netInc2020), h = 10)$mean, nrow(future_years)), 
+#         Pelec = head(forecast(auto.arima(celec$Pelec), h = 10)$mean, nrow(future_years)),
+#         IPC = head(forecast(auto.arima(celec$IPC), h = 10)$mean, nrow(future_years)),
+#         Population = head(forecast(auto.arima(celec$Population), h = 10)$mean, nrow(future_years)),
+#         IRC = head(forecast(auto.arima(celec$IRC), h = 10)$mean, nrow(future_years))
+#     )
+
+# # Extract single values for IPC in 2015 and 2020
+# IPC_2015 <- celec %>% filter(Date == 2015) %>% pull(IPC)
+# IPC_2020 <- celec %>% filter(Date == 2020) %>% pull(IPC)
+
+# # Now apply the transformation
+# future_values <- future_values %>%
+#     mutate(
+#         netInc2015_pc = (netInc2020 / Population) * (IPC_2015 / IPC_2020),
+#         Pelec2015 = Pelec * (IPC_2015 / IPC),
+#         ln_Inc_pc_MC = log(netInc2015_pc) - mean(log(netInc2015_pc), na.rm = TRUE),
+#         ln_price2015_MC = log(Pelec2015) - mean(log(Pelec2015), na.rm = TRUE)
+#     )
+
+
+# # %============================%=
+# # Bootstrap forecast for full ####
+
+# B <- 1000  # Number of bootstrap replications
+# bootstrap_forecasts_full <- matrix(NA, nrow = B, ncol = nrow(future_values))
+# set.seed(123)  # For reproducibility
+
+# for (b in 1:B) {
+#     # Resample residuals with replacement
+#     resampled_residuals_full <- sample(residuals_full_boot, size = nrow(future_values), replace = TRUE)
+    
+#     # Compute forecasted log consumption per capita
+#     log_forecasted_elec_cons_pc_full <- predict(celecbreak.lm, newdata = future_values) + resampled_residuals_full
+    
+#     # Convert back to absolute values
+#     bootstrap_forecasts_full[b, ] <- exp(log_forecasted_elec_cons_pc_full)
+# }
+
+# # %=================================================%=
+# # OLS FORECAST with bootstrap post-2007 ####
+# # %=================================================%=
+# # Extract regression residuals after 2007
+# residuals_after_boot <- residuals(best_model_after)
+# # Create future_values_after based on celec_after_2007
+    
+# future_values_after <- future_years %>%
+#     mutate(
+#         # netInc2020 = predict(lm(netInc2020 ~ Date, data = celec_after_2007), newdata = future_years),
+#         # Pelec = predict(lm(Pelec ~ Date, data = celec_after_2007), newdata = future_years),
+#         # IPC = predict(lm(IPC ~ Date, data = celec_after_2007), newdata = future_years),
+#         # Population = predict(lm(Population ~ Date, data = celec_after_2007), newdata = future_years),
+#         # IRC = predict(lm(IRC ~ Date, data = celec_after_2007), newdata = future_years), 
+#         break_dummy = ifelse(Date > 2007, 1, 0),
+#         crisis_dummy = ifelse(Date %in% c(2001, 2008, 2020), 1, 0),
+#         netInc2020 = head(forecast(auto.arima(celec_after_2007$netInc2020), h = 10)$mean, nrow(future_years)), 
+#         Pelec = head(forecast(auto.arima(celec_after_2007$Pelec), h = 10)$mean, nrow(future_years)),
+#         IPC = head(forecast(auto.arima(celec_after_2007$IPC), h = 10)$mean, nrow(future_years)),
+#         Population = head(forecast(auto.arima(celec_after_2007$Population), h = 10)$mean, nrow(future_years)),
+#         IRC = head(forecast(auto.arima(celec_after_2007$IRC), h = 10)$mean, nrow(future_years))
+#     )
+
+# # Now apply the transformation for future_values_after
+# future_values_after <- future_values_after %>%
+#     mutate(
+#         netInc2015_pc = (netInc2020 / Population) * (IPC_2015 / IPC_2020),
+#         Pelec2015 = Pelec * (IPC_2015 / IPC),
+#         ln_Inc_pc_MC = log(netInc2015_pc) - mean(log(netInc2015_pc), na.rm = TRUE),
+#         ln_price2015_MC = log(Pelec2015) - mean(log(Pelec2015), na.rm = TRUE)
+#     )
+
+# bootstrap_forecasts_after <- matrix(NA, nrow = B, ncol = nrow(future_values_after))
+# B <- 1000  # Number of bootstrap replications
+# set.seed(123)  # For reproducibility
+
+# for (b in 1:B) {
+#     # Resample residuals with replacement
+#     resampled_residuals_after <- sample(residuals_after_boot, size = nrow(future_values_after), replace = TRUE)
+    
+#     # Compute forecasted log consumption per capita
+#     log_forecasted_elec_cons_pc_after <- predict(best_model_after, newdata = future_values_after) + resampled_residuals_after
+    
+#     # Convert back to absolute values
+#     bootstrap_forecasts_after[b, ] <- exp(log_forecasted_elec_cons_pc_after)
+
+# }
+
+# # %============================%=
+# # Confidence Intervals ####
+
+# forecast_mean_after <- colMeans(bootstrap_forecasts_after)
+# forecast_lower_after <- apply(bootstrap_forecasts_after, 2, function(x) quantile(x, 0.05))  # 5th percentile
+# forecast_upper_after <- apply(bootstrap_forecasts_after, 2, function(x) quantile(x, 0.95))  # 95th percentile
+
+# forecast_results_after <- future_values %>%
+#     mutate(
+#         elec_forecast_mean_after = forecast_mean_after,
+#         elec_forecast_lower_after = forecast_lower_after,
+#         elec_forecast_upper_after = forecast_upper_after
+#     )
+
+# forecast_mean_full <- colMeans(bootstrap_forecasts_full)
+# forecast_lower_full <- apply(bootstrap_forecasts_full, 2, function(x) quantile(x, 0.05))  # 5th percentile
+# forecast_upper_full <- apply(bootstrap_forecasts_full, 2, function(x) quantile(x, 0.95))  # 95th percentile
+
+# forecast_results_full <- future_values %>%
+#     mutate(
+#         elec_forecast_mean_full = forecast_mean_full,
+#         elec_forecast_lower_full = forecast_lower_full,
+#         elec_forecast_upper_full = forecast_upper_full
+#     )
+
+# # %============================%=
+# # Plot results ####
+
+# # Plot results for after 2007
+# ggplot(forecast_results_after, aes(x = Date)) +
+#     geom_ribbon(aes(ymin = elec_forecast_lower_after, ymax = elec_forecast_upper_after), fill = "lightblue", alpha = 0.4) +
+#     geom_line(aes(y = elec_forecast_mean_after), color = "blue", size = 1.2) +
+#     geom_point(data = celec, aes(x = Date, y = elec_cons_pc), color = "black", size = 1) +
+#     geom_line(data = celec %>% filter(Date <= 2020), aes(x = Date, y = elec_cons_pc), color = "black", size = 0.5) +  # Thin black line for actual data
+#     geom_line(data = celec_after_2007 %>% filter(Date <= 2020), aes(x = Date, y = exp(predict(best_model_after, newdata = celec_after_2007 %>% filter(Date <= 2020)))), color = "red", size = 1.2) +
+#     labs(
+#         title = "Electricity Consumption Forecast",
+#         x = "Year",
+#         y = "Electricity Consumption (GWh)"
+#     ) +
+#     theme_minimal()
+
+# # Save the plot
+# ggsave("econometrics-II-report/Images/bootstrap_forecast_after.jpeg", width = 10, height = 6)
+
+# # Plot results for full model
+# ggplot(forecast_results_full, aes(x = Date)) +
+#     geom_ribbon(aes(ymin = elec_forecast_lower_full, ymax = elec_forecast_upper_full), fill = "lightblue", alpha = 0.4) +
+#     geom_line(aes(y = elec_forecast_mean_full), color = "blue", size = 1.2) +
+#     geom_point(data = celec, aes(x = Date, y = elec_cons_pc), color = "black", size = 1) +
+#     labs(
+#         title = "Electricity Consumption Forecast with Bootstrap (95% CI) - Full Model",
+#         x = "Year",
+#         y = "Electricity Consumption (GWh)"
+#     ) +
+#     theme_minimal()
+
+# # Save the plot
+# ggsave("econometrics-II-report/Images/bootstrap_forecast_full.jpeg", width = 10, height = 6)
+
+
+
+
+# %=================================================%=
+# ECONOMETRIC FORECAST FROM ARIMA ####
+# %=================================================%=
+## Be sure that there is weak exogeneity between the dependent variable and the independent variables
+# # Test if electricity consumption Granger-causes income per capita
+# grangertest(ln_Inc_pc_MC ~ log(elec_cons_pc), order = 2, data = celec)
+
+# # Test for electricity price
+# grangertest(ln_price2015_MC ~ log(elec_cons_pc), order = 2, data = celec)
+
+# # Test for climate index
+# grangertest(IRC ~ log(elec_cons_pc), order = 2, data = celec)
+
+# # Convert to long format for ggplot
+# celec_after_2007_long <- celec_after_2007 %>%
+#     select(Date, ln_Inc_pc_MC, ln_price2015_MC, IRC) %>%
+#     pivot_longer(cols = -Date, names_to = "Variable", values_to = "Value")
+
+# # Plot each time series
+# ggplot(celec_after_2007_long, aes(x = Date, y = Value, color = Variable)) +
+#     geom_line() +
+#     facet_wrap(~Variable, scales = "free_y") +
+#     theme_minimal() +
+#     labs(title = "Time Series of Explanatory Variables", x = "Year", y = "Value")
+
+# # Convert Date column to a time series format
+# log_elec_2007_ts <- ts(log(celec_after_2007$elec_cons_pc), start = min(celec_after_2007$Date), frequency = 1)
+
+# log_Inc_pc_2007_ts <- ts(celec_after_2007$ln_Inc_pc_MC, start = min(celec_after_2007$Date), frequency = 1)
+
+# log_price_2007_ts <- ts(celec_after_2007$ln_price2015_MC, start = min(celec_after_2007$Date), frequency = 1)
+
+# IRC_2007_ts <- ts(celec_after_2007$IRC, start = min(celec_after_2007$Date), frequency = 1)
+
+
+# # Perform Elliott-Rothenberg-Stock (ERS) test
+# ers_test_price <- ur.ers(log_price_2007_ts, type = "DF-GLS", model = "constant", lag.max = 3)
+# print(summary(ers_test_price))
+
+# # Perform KPSS test
+# kpss_test_price <- kpss.test(log_price_2007_ts)
+# print(kpss_test_price)
+
+# diff_price_ts <- diff(log_price_2007_ts, differences = 1)
+# plot(diff_price_ts, main="Differenced Price", ylab="Differenced Consumption", xlab="Year")
+
+# ## Non-stationary, apply differencing
+# # Determine optimal differencing order (d)
+# d <- 0
+# max_d <- 3  # Set a reasonable maximum differencing order
+
+# while (d < max_d) {
+#   diff_price_ts <- diff(log_price_2007_ts, differences = d + 1)
+  
+#   # Check if the differenced series is long enough
+#   if (length(diff_price_ts) < 10) {
+#     cat("Insufficient data after differencing, stopping at d =", d, "\n")
+#     break
+#   }
+  
+#   ers_test_result <- ur.ers(diff_price_ts, type = "DF-GLS", model = "constant", lag.max = 3)
+#   kpss_test_result <- kpss.test(diff_price_ts)
+  
+#   # Properly extract test statistics
+#   ers_stat <- ers_test_result@teststat
+#   ers_crit_5pct <- ers_test_result@cval["5pct"]
+  
+#   if (!is.na(ers_stat) && !is.na(ers_crit_5pct) && ers_stat <= -ers_crit_5pct && kpss_test_result$p.value >= 0.05) {
+#     d <- d + 1
+#     break
+#   }
+  
+#   d <- d + 1
+# }
+
+# cat("Optimal differencing order (d) selected:", d, "\n")
+
+# plot(diff_price_ts, main="Differenced Price", ylab="Differenced Consumption", xlab="Year")
+
+
+# # ACF and PACF plots to determine p and q
+# acf(diff_elec_ts, main="ACF of Differenced Data")
+# pacf(diff_elec_ts, main="PACF of Differenced Data")
+
+# # Fit ARIMA model
+# fit <- auto.arima(elec_ts, seasonal = FALSE)
+# summary(fit)
+
+# # Forecast for the next 10 years
+# forecasted <- forecast(fit, h=10)
+# plot(forecasted, main="Electricity Consumption Forecast")
+
+# cat("Optimal differencing order (d) selected:", d, "\n")
