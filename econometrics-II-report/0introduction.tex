@@ -88,73 +88,6 @@ About Structural VAR: Structural shocks are supposed to be white noise processes
 
 we could use short-run restrictions with Cholesky decomposition, but also Local Projection à la Jordà (2005) or sign (long-run) restrictions à la Uhlig (2005).
 
-\subsection{OLS Regression}
-For $n = 32$ observations, $k = 6$ variables, we use the following linear regression model:
-\begin{align*}
-    \boldsymbol{Y} & = \boldsymbol{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon} \\
-    \begin{bmatrix} 
-        y_1 \\ y_2 \\ \vdots \\ y_n 
-        \end{bmatrix} & = \begin{bmatrix}
-        x_{11} & x_{12} & \cdots & x_{1k} \\ 
-        x_{21} & x_{22} & \cdots & x_{2k} \\ 
-        \vdots & \vdots & \ddots & \vdots \\ 
-        x_{n1} & x_{n2} & \cdots & x_{nk} 
-        \end{bmatrix} \begin{bmatrix}
-        \beta_1 \\ \beta_2 \\ \vdots \\ \beta_k 
-        \end{bmatrix} + \begin{bmatrix} 
-        \varepsilon_1 \\ \varepsilon_2 \\ \vdots \\ \varepsilon_n \end{bmatrix}
-\end{align*}
-
-Ordinary Least Square (OLS) method is used to estimate the coefficients $\boldsymbol{\beta}$. It holds over the following hypothesis:
-\begin{enumerate}
-    \item More observations than explanatory variables
-    \item Absence of multicollinearity $\to$ useful to check if we are using lags.
-    \item Explanatory variables rely on data and the error term is random
-    \item The expected value of the error term is zero
-    \item Errors are not autocorrelated
-    \item Errors are homoscedastic
-    \item The error terms follow a normal distribution
-\end{enumerate}
-
-If the hypotheses 4, 5 and 6 are verified, the error term is white noise. 
-
-The $R^2$ coefficient is used to evaluate the goodness of fit of the model. It measures the proportion of the variance in the dependent variable that is predictable from the independent variables. The adjusted $R^2$ is used to compare the goodness of fit of models with different numbers of variables.
-
-Confidence interval for $\beta_j \in \{\beta_1, \beta_2, \ldots, \beta_k\}$ is given by a Student's t-distribution with $n - k - 1$ degrees of freedom. (\textit{is it useful?}). \\
-
-Si l'hypothèse de non colinéarité n'est pas vérifiée, l'estimation du modèle est impossible (elle nécessiterait d'inverser une matrice singulière) alors que pour toutes les autres hypothèses l'estimation est possible mais donne un estimateur biaisé et/ou non efficace (à variance non minimale) mais il existe des corrections possibles. La normalité des erreurs est quant à elle non obligatoire mais permet de tirer de bonnes propriétés. 
-
-\subsubsection{QQ plot}
-The QQ-plot shows that the error terms are normally distributed.
-
-Kolmogorov Smirnov: Various studies have found that, even in this corrected form, the test is less powerful for testing normality than the Shapiro–Wilk test or Anderson–Darling test.
-
-The Shapiro–Wilk test is known not to work well in samples with many identical values. Jarque-Bera is bad for small samples $\rightarrow$ \textbf{Anderson-Darling} is better. 
-
-\textbf{Student} and \textbf{Fisher} tests are used to test the significance of the coefficients: they depends on the normality of the residuals.
-
-\subsubsection{homoscedasticity}
-The Goldfeld–Quandt test is not very robust to specification errors. The \textbf{Breusch-Pagan} test is designed to detect only linear forms of heteroskedasticity. {White test} is more general and can detect a wider range of forms of heteroskedasticity, but cannot be used for small samples. \\
-
-heteroskedasticity $\rightarrow$ weighted regression.
-
-\subsubsection{Autocorrelation}
-Durbin–Watson statistic (or Durbin's h statistic), which is only valid for nonstochastic regressors and for testing the possibility of a first-order autoregressive model (e.g. AR(1)) for the regression errors. The Breusch–Godfrey test has none of these restrictions, and is statistically more powerful than Durbin's h statistic. The Breusch–Godfrey test is considered to be more general than the \textbf{Ljung-Box} test because the latter requires the assumption of strict exogeneity, but the Breusch–Godfrey test does not. However, the \textbf{Breusch–Godfrey} test requires the assumptions of stronger forms of predeterminedness and conditional homoscedasticity.
-
-\subsubsection{Multicollinerarity}
-Commonly occurs in models with large numbers of parameters.
-
-Use of Variance Inflation Factor (VIF) to detect multicollinearity. No clear threshold for VIF, and there is often a misunderstanding on how to deal with multicollinearity. \\
-
-If multicollinearity is detected, the following methods can be used:
-\begin{itemize}
-    \item Remove one of the variables or combine them (not recommended)
-    \item Use principal component analysis
-    \item Use ridge regression: regularization method.
-    \item Use LASSO: variable selection and regularization method.
-    \item Use Elastic Net: linear combination of LASSO and ridge regression.
-\end{itemize}
-
 \subsection{Non-linear regression}
 Mention the possible use of a Markov Switching process to account for IRC (up or down), or a price effect (low growth or strong growth) — use Catherine Doz's course for theoretical background.
 
@@ -177,35 +110,3 @@ Guess for a growth rate with `predict` and add fluctuations based on the regress
 Les mesures d’erreur quadratique moyenne et d’erreur moyenne absolue permettent de mesurer l’écart entre les prévisions et les observations lorsqu’on effectue
 des prévisions sur des données rétrospectives. Les indicateurs obtenus à partir de la statistique U de Theil sont utilisés sur des prévisions rétrospectives afin d’évaluer si les erreurs de prévisions retranscrivent un effet de biais, de variance ou, de préférence, un
 effet de covariance.
-
-\subsection{À reproduire ! (p91 du poly)}
-"Modèle de consommation d’électricité aux Etats-Unis expliquant le logarithme de la consommation d’électricité par habitant par le logarithme du revenu par habitant en monnaie constante et le logarithme du prix de l’électricité en monnaie constante." \\
-
-"En effet, d’un point de vue économique, la consommation d’un bien dépend d’un effet de revenu et d’un effet de prix auxquels peuvent s’ajouter, le cas échéant, d’autres effets. Ici, on conserve la spécification la plus
-simple où l’utilité d’un bien dépend d’un effet de richesse et d’un effet prix." \\
-
-\textit{Dans notre cas, on ajoute l'effet de l'IRC et approxime les revenus par le PIB}.
-
-\begin{equation}
-    \ln{\frac{c_{elec}}{pop}} = \alpha + \beta_1 \ln{\frac{{PIB}}{pop}} + \beta_2 \ln{\frac{prix_{elec}}{IPC}} + \beta_3 IRC + \varepsilon
-\end{equation}
-
-\textit{Attenion: le PIB est en euros constants de 2020: on doit le convertir en euros constants de 2015.} 
-$PIB_{2015} = PIB_{2020} \times \frac{IPC_{2015}}{IPC_{2020}}$.
-
-Les coefficients $\beta_1$ et $\beta_2$ sont, respectivement, l’élasticité de la consommation
-d’électricité par rapport au revenu et l’élasticité de la consommation d’électricité par rapport au prix. Ces coefficients mesurent la variation en pourcentage de la
-consommation d’électricité par rapport, respectivement, à une variation en pourcentage du revenu et la variation et à une variation en pourcentage des prix. \\
-
-On fait ensuite un test de Chow sur 2009.
-
-Cusum est peu puissant (on accepte facilement l’hypothèse nulle). On peut ceci dit ajouter un test de Chow pas à pas entre 2007 et 2012. \\
-
-Puis test de Cusum-square pour attester du structural break. On refait une régression sur 2009-2020, et on renouvelle le test de Cusum-square pour vérifier la stabilité temporelle du modèle. 
-
-
-
-\section{Critique}
-Utiliser le déflateur du PIB plutôt que l'IPC pour tenir compte des changements dans la composition des biens et services produits. 
-
-Le déflateur du PIB est un indice de prix qui reflète les variations des prix de tous les biens et services produits dans une économie. Contrairement à d’autres indices (comme l’IPC, qui se concentre sur un panier fixe de biens), le déflateur du PIB tient compte des changements dans la composition des biens et services produits.
